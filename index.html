@@ -290,7 +290,13 @@ nav button.on{color:var(--acc)}
     </div>
 
     <div id="st-src" style="display:none">
-      <div class="note">مصادر RSS للمواقع الإخبارية. التطبيق بيجيب منها تلقائيًا. تقدر تضيف أي خلاصة RSS بتاعة موقع أو صفحة.</div>
+      <div class="note">⭐ <b>الحل النهائي (موصى به):</b> اعمل Cloudflare Worker مجاني والصق رابطه هنا. الـ Worker بيجيب كل الأخبار ويفلتر أخبار الري لوحده ويرجّعها جاهزة — بدون أي مشاكل. افتح ملف <b>cloudflare-worker.js</b> فيه الكود وخطوات التركيب بالتفصيل.</div>
+      <div class="field"><label>رابط الـ Worker الخاص بك (بروكسي ثابت)</label>
+        <input id="proxy-url" type="url" placeholder="https://xxx.workers.dev" dir="ltr">
+      </div>
+      <button class="btn" onclick="saveProxy()">حفظ البروكسي</button>
+      <div style="height:14px"></div>
+      <div class="note">مصادر RSS للمواقع الإخبارية. التطبيق بيجيب منها ويفلتر بالكلمات المفتاحية.</div>
       <div class="field"><label>اسم المصدر</label><input id="src-nm" placeholder="مثال: بوابة الأهرام"></div>
       <div class="field"><label>رابط RSS</label><input id="src-url" type="url" placeholder="https://…/rss" dir="ltr"></div>
       <button class="btn" onclick="addSrc()">إضافة مصدر</button>
@@ -331,13 +337,22 @@ function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}c
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
 /* ============ CORS proxies for RSS ============ */
-const PROXIES = [
-  u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  u=>`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
-  u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-  u=>`https://proxy.cors.sh/${u}`,
-  u=>`https://thingproxy.freeboard.io/fetch/${u}`,
-];
+let USER_PROXY = localStorage.getItem('irn_proxy')||'';
+function buildProxies(){
+  const arr=[];
+  if(USER_PROXY){
+    const base=USER_PROXY.replace(/\/+$/,'');
+    arr.push(u=>`${base}/?url=${encodeURIComponent(u)}`);
+  }
+  arr.push(
+    u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u=>`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
+    u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+    u=>`https://thingproxy.freeboard.io/fetch/${u}`
+  );
+  return arr;
+}
+let PROXIES = buildProxies();
 let _fetchStats={ok:0,fail:0};
 
 async function fetchRSS(url){
@@ -393,21 +408,37 @@ async function loadFeed(){
   _fetchStats={ok:0,fail:0};
 
   let results=[];
-  const tasks = SRC.map(s=>fetchRSS(s.url).then(items=>items.map(it=>({...it,srcName:s.nm,srcType:s.ty}))));
-  const settled = await Promise.allSettled(tasks);
-  settled.forEach(r=>{if(r.status==='fulfilled') results=results.concat(r.value)});
+  let rawCount=0;
+  let usedWorker=false;
 
-  const rawCount = results.length;
+  // (1) لو فيه Worker: نجيب JSON جاهز ومفلتر مرة واحدة
+  if(USER_PROXY){
+    try{
+      const r=await fetch(USER_PROXY.replace(/\/+$/,'')+'/?_t='+Date.now(),{cache:'no-store'});
+      if(r.ok){
+        const data=await r.json();
+        if(data&&Array.isArray(data.items)){
+          results=data.items;rawCount=results.length;usedWorker=true;_fetchStats.ok=data.sources_ok||1;
+        }
+      }
+    }catch(e){/* fallback */}
+  }
 
-  // dedupe by title
-  const seen=new Set();
-  results = results.filter(r=>{const k=r.title.slice(0,60);if(seen.has(k))return false;seen.add(k);return true});
-  // keyword filter
-  results = results.filter(matchKW);
-  // manual items
+  // (2) احتياطي: بروكسيات + RSS مباشر
+  if(!usedWorker){
+    const tasks = SRC.map(s=>fetchRSS(s.url).then(items=>items.map(it=>({...it,srcName:s.nm,srcType:s.ty}))));
+    const settled = await Promise.allSettled(tasks);
+    settled.forEach(r=>{if(r.status==='fulfilled') results=results.concat(r.value)});
+    rawCount = results.length;
+    // dedupe + keyword filter (الـ Worker بيعملهم بنفسه)
+    const seen=new Set();
+    results = results.filter(r=>{const k=r.title.slice(0,60);if(seen.has(k))return false;seen.add(k);return true});
+    results = results.filter(matchKW);
+  }
+
+  // الأخبار اليدوية دايمًا فوق
   const manualItems = MANUAL.map(m=>({...m,srcType:m.src,srcName:srcLabel(m.src),manual:true}));
   results = manualItems.concat(results);
-  // sort newest
   results.sort((a,b)=>(b.t||0)-(a.t||0));
 
   allItems = results;
@@ -418,13 +449,13 @@ async function loadFeed(){
     const isLocal = location.protocol==='file:' || location.protocol==='content:';
     let msg;
     if(isLocal){
-      msg='⚠️ التطبيق متفتّح كملف محلي.<br>سيرفرات جلب الأخبار بترفض الطلب من الملفات المحلية.<br><b>الحل:</b> ارفعه على GitHub Pages أو Firebase وافتحه بـ https.<br>دلوقتي تقدر تستخدم الإدخال اليدوي عادي.';
-    } else if(_fetchStats.ok===0 && _fetchStats.fail>0){
-      msg='تعذّر الوصول للمصادر دلوقتي (سيرفر الوسيط مشغول).<br>اضغط «تحديث» تاني بعد ثواني، أو أضف مصدر RSS بديل من الإعدادات.';
-    } else if(rawCount>0){
-      msg='فيه أخبار اتجابت بس مفيش حاجة مطابقة للكلمات المفتاحية.<br>قلّل/غيّر الكلمات من الإعدادات.';
+      msg='⚠️ التطبيق متفتّح كملف محلي.<br>افتحه من سيرفر (GitHub Pages / Firebase) بـ https.';
+    } else if(USER_PROXY && _fetchStats.ok===0){
+      msg='الـ Worker رجع فاضي. تأكد إن الرابط صح ومتفعّل، وافتحه في المتصفح للتجربة.';
+    } else if(!USER_PROXY){
+      msg='البروكسيات المجانية مشغولة.<br><b>الحل النهائي:</b> اعمل Cloudflare Worker وحُط رابطه في الإعدادات ← المصادر (الملف cloudflare-worker.js فيه الخطوات).';
     } else {
-      msg='مفيش أخبار مطابقة دلوقتي.<br>جرّب تغيّر الكلمات المفتاحية أو أضف مصدر، أو سجّل خبر يدوي.';
+      msg='مفيش أخبار مطابقة دلوقتي. جرّب تحديث تاني أو غيّر الكلمات المفتاحية.';
     }
     feed.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><div>${msg}</div></div>`;
   }
@@ -542,7 +573,7 @@ function switchTab(t){
 /* ============ Sheets ============ */
 function openSheet(which){
   if(which==='add'){document.getElementById('sheet-add').classList.add('open')}
-  if(which==='settings'){renderKw();renderSrc();document.getElementById('sheet-settings').classList.add('open')}
+  if(which==='settings'){renderKw();renderSrc();document.getElementById('proxy-url').value=USER_PROXY;document.getElementById('sheet-settings').classList.add('open')}
 }
 function closeSheet(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'))}
 document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheet()}));
@@ -593,6 +624,12 @@ function addSrc(){
 }
 function delSrc(i){SRC.splice(i,1);save(LS.src,SRC);renderSrc()}
 function resetSrc(){SRC=JSON.parse(JSON.stringify(DEFAULT_SRC));save(LS.src,SRC);renderSrc();toast('تم استعادة المصادر');loadFeed()}
+function saveProxy(){
+  USER_PROXY=document.getElementById('proxy-url').value.trim();
+  localStorage.setItem('irn_proxy',USER_PROXY);
+  PROXIES=buildProxies();
+  toast(USER_PROXY?'تم حفظ البروكسي ⭐':'تم المسح');loadFeed();
+}
 
 /* ============ Toast ============ */
 let toastT;
