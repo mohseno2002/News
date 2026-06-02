@@ -337,7 +337,7 @@ function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}c
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
 /* ============ CORS proxies for RSS ============ */
-let USER_PROXY = localStorage.getItem('irn_proxy')||'';
+let USER_PROXY = localStorage.getItem('irn_proxy') || 'https://silent-wildflower-2282.mohseno2002.workers.dev';
 function buildProxies(){
   const arr=[];
   if(USER_PROXY){
