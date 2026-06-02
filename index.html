@@ -294,6 +294,7 @@ nav button.on{color:var(--acc)}
       <div class="field"><label>اسم المصدر</label><input id="src-nm" placeholder="مثال: بوابة الأهرام"></div>
       <div class="field"><label>رابط RSS</label><input id="src-url" type="url" placeholder="https://…/rss" dir="ltr"></div>
       <button class="btn" onclick="addSrc()">إضافة مصدر</button>
+      <button class="btn ghost" onclick="resetSrc()" style="margin-top:8px">↺ استعادة المصادر الافتراضية</button>
       <div class="srclist" id="srclist"></div>
     </div>
 
@@ -312,8 +313,11 @@ const DEFAULT_KW = ['ترعة','ترع','مصرف','مصارف','الري','وز
   'تطهير','حصة مائية','تعدٍ على','شبكة الري','مياه الشرب','السد العالي','مفيض','حياة كريمة',
   'تبطين','منشآت مائية','الإسماعيلية','المنصورية','قناطر'];
 const DEFAULT_SRC = [
-  {nm:'جوجل أخبار - الري', url:'https://news.google.com/rss/search?q=%D8%A7%D9%84%D8%B1%D9%8A+%D8%A7%D9%84%D8%AA%D8%B1%D8%B9+%D8%A7%D9%84%D9%85%D8%B5%D8%A7%D8%B1%D9%81&hl=ar&gl=EG&ceid=EG:ar', ty:'news'},
-  {nm:'جوجل أخبار - الموارد المائية', url:'https://news.google.com/rss/search?q=%D9%88%D8%B2%D8%A7%D8%B1%D8%A9+%D8%A7%D9%84%D9%85%D9%88%D8%A7%D8%B1%D8%AF+%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D9%8A%D8%A9+%D9%88%D8%A7%D9%84%D8%B1%D9%8A&hl=ar&gl=EG&ceid=EG:ar', ty:'gov'},
+  {nm:'اليوم السابع', url:'https://www.youm7.com/rss/SectionRss?SectionID=88', ty:'news'},
+  {nm:'بوابة الأهرام', url:'https://gate.ahram.org.eg/rss/4.aspx', ty:'news'},
+  {nm:'الوطن', url:'https://www.elwatannews.com/feeds', ty:'news'},
+  {nm:'صدى البلد', url:'https://www.elbalad.news/rss/all', ty:'news'},
+  {nm:'جوجل أخبار - الري', url:'https://news.google.com/rss/search?q=%D8%A7%D9%84%D8%B1%D9%8A+%D8%A7%D9%84%D8%AA%D8%B1%D8%B9+%D8%A7%D9%84%D9%85%D8%B5%D8%A7%D8%B1%D9%81&hl=ar&gl=EG&ceid=EG:ar', ty:'gov'},
 ];
 let KW = load(LS.kw, DEFAULT_KW);
 let SRC = load(LS.src, DEFAULT_SRC);
@@ -329,8 +333,9 @@ function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 /* ============ CORS proxies for RSS ============ */
 const PROXIES = [
   u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
   u=>`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
+  u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+  u=>`https://proxy.cors.sh/${u}`,
   u=>`https://thingproxy.freeboard.io/fetch/${u}`,
 ];
 let _fetchStats={ok:0,fail:0};
@@ -587,6 +592,7 @@ function addSrc(){
   renderSrc();toast('تم إضافة المصدر');
 }
 function delSrc(i){SRC.splice(i,1);save(LS.src,SRC);renderSrc()}
+function resetSrc(){SRC=JSON.parse(JSON.stringify(DEFAULT_SRC));save(LS.src,SRC);renderSrc();toast('تم استعادة المصادر');loadFeed()}
 
 /* ============ Toast ============ */
 let toastT;
