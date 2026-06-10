@@ -14,24 +14,27 @@
   --bg:#0b1a2a; --bg2:#0e2438; --panel:#102b42; --panel2:#143452;
   --line:#1d4566; --txt:#e8f1f8; --mut:#8fb0c7;
   --acc:#22d3a8; --acc2:#3fa9f5; --warn:#f5a623; --danger:#ef5350;
-  --gold:#d4af37; --r:14px; --sh:0 8px 30px rgba(0,0,0,.4);
+  --gold:#d4af37; --agg:#a78bfa; --r:14px; --sh:0 8px 30px rgba(0,0,0,.4);
   --glow1:rgba(34,211,168,.08); --glow2:rgba(63,169,245,.08);
   --hdr1:rgba(11,26,42,.97); --hdr2:rgba(11,26,42,.86);
   --navg:var(--bg); --navg2:rgba(11,26,42,.95); --logotxt:#04121a;
+  --skel1:#13314c; --skel2:#1a4062;
 }
 html[data-theme="light"]{
   --bg:#eef3f7; --bg2:#ffffff; --panel:#ffffff; --panel2:#f1f6fa;
   --line:#d4e1ec; --txt:#0e2438; --mut:#5d7a90;
   --acc:#0a9d7c; --acc2:#1d7fd1; --warn:#c47e00; --danger:#d33;
-  --gold:#a9852a; --sh:0 6px 22px rgba(20,52,82,.12);
+  --gold:#a9852a; --agg:#7c5cd6; --sh:0 6px 22px rgba(20,52,82,.12);
   --glow1:rgba(10,157,124,.06); --glow2:rgba(29,127,209,.06);
   --hdr1:rgba(255,255,255,.97); --hdr2:rgba(238,243,247,.88);
   --navg:#ffffff; --navg2:rgba(255,255,255,.95); --logotxt:#ffffff;
+  --skel1:#e4ecf3; --skel2:#f3f8fc;
 }
 html[data-theme="light"] .card{background:var(--panel)}
 html[data-theme="light"] .tag{background:rgba(10,157,124,.12)}
 html[data-theme="light"] .live{background:rgba(10,157,124,.1)}
 html[data-theme="light"] .note{background:rgba(29,127,209,.07);border-color:rgba(29,127,209,.22);color:#3a5a72}
+html[data-theme="light"] .card p{color:#42627a}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
@@ -41,13 +44,17 @@ body{
    var(--bg);
   color:var(--txt);min-height:100vh;line-height:1.6;
   padding-bottom:84px;transition:background .3s,color .3s;
+  overscroll-behavior-y:contain;
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
 }
 /* ===== Header ===== */
 header{
   position:sticky;top:0;z-index:50;
   background:linear-gradient(180deg,var(--hdr1),var(--hdr2));
   backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
-  padding:14px 16px calc(14px + env(safe-area-inset-top)) 16px;
+  padding:14px 16px calc(12px + env(safe-area-inset-top)) 16px;
   padding-top:max(14px,env(safe-area-inset-top));
 }
 .brand{display:flex;align-items:center;gap:12px}
@@ -65,11 +72,18 @@ header{
 .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);
   animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,211,168,.5)}50%{opacity:.5;box-shadow:0 0 0 6px rgba(34,211,168,0)}}
+/* waterline progress — خط الماء أثناء الجلب */
+.waterline{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden;opacity:0;transition:opacity .3s;pointer-events:none}
+.waterline.on{opacity:1}
+.waterline i{display:block;height:100%;width:38%;border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--acc),var(--acc2),transparent);
+  animation:flow 1.2s linear infinite}
+@keyframes flow{0%{transform:translateX(110%)}100%{transform:translateX(-380%)}}
 /* search */
 .searchbar{margin-top:12px;display:flex;gap:8px}
 .searchbar input{
   flex:1;background:var(--panel);border:1px solid var(--line);color:var(--txt);
-  border-radius:12px;padding:11px 14px;font-family:inherit;font-size:14px;outline:none}
+  border-radius:12px;padding:11px 14px;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
 .searchbar input::placeholder{color:var(--mut)}
 .searchbar input:focus{border-color:var(--acc)}
 .searchbar button{
@@ -84,16 +98,31 @@ header{
 .chip.on{background:rgba(34,211,168,.16);border-color:var(--acc);color:var(--acc)}
 /* ===== Main ===== */
 main{padding:8px 16px 16px;max-width:760px;margin:0 auto}
-.toolbar{display:flex;align-items:center;justify-content:space-between;
-  margin:8px 0 14px;gap:10px}
-.count{font-size:13px;color:var(--mut);font-weight:600}
-.count b{color:var(--acc)}
+/* time window segmented control */
+.windowbar{display:flex;align-items:center;gap:10px;margin:10px 0 6px}
+.seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:3px;flex:1;max-width:320px}
+.seg button{flex:1;background:none;border:none;color:var(--mut);font-family:'Cairo';
+  font-weight:700;font-size:12.5px;padding:8px 4px;border-radius:9px;cursor:pointer;transition:.2s;white-space:nowrap}
+.seg button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#04121a;box-shadow:0 3px 10px rgba(34,211,168,.3)}
 .refresh{display:flex;align-items:center;gap:6px;background:var(--panel);
-  border:1px solid var(--line);color:var(--txt);padding:8px 12px;border-radius:10px;
-  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+  border:1px solid var(--line);color:var(--txt);padding:9px 13px;border-radius:11px;
+  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-inline-start:auto}
 .refresh svg{width:15px;height:15px}
 .refresh.spin svg{animation:rot 1s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
+/* stats strip */
+.stats{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  font-size:12px;color:var(--mut);font-weight:600;margin:4px 0 12px;min-height:18px}
+.stats b{color:var(--acc)}
+.stats .sep{opacity:.4}
+.stats .srcok{color:var(--acc2)}
+.stats .srcbad{color:var(--warn)}
+/* day group header */
+.dayhdr{display:flex;align-items:center;gap:10px;margin:18px 2px 10px;
+  font-family:'Cairo';font-weight:800;font-size:13.5px;color:var(--mut)}
+.dayhdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.dayhdr .dc{color:var(--acc);background:rgba(34,211,168,.1);border:1px solid rgba(34,211,168,.25);
+  padding:1px 9px;border-radius:12px;font-size:11px}
 /* card */
 .card{background:linear-gradient(180deg,var(--panel),var(--bg2));
   border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;
@@ -105,34 +134,66 @@ main{padding:8px 16px 16px;max-width:760px;margin:0 auto}
 .card.s-fb::before{background:#4267B2}
 .card.s-x::before{background:#1da1f2}
 .card.s-gov::before{background:var(--gold)}
+.card.s-agg::before{background:var(--agg)}
 .card.s-manual::before{background:var(--warn)}
+.card:active{transform:scale(.995)}
+/* hero — أحدث خبر */
+.card.hero{border:1px solid transparent;
+  background:linear-gradient(var(--panel),var(--bg2)) padding-box,
+             linear-gradient(135deg,var(--acc),var(--acc2)) border-box;
+  padding:18px 16px}
+.card.hero h3{font-size:18px;line-height:1.5}
+.card.hero .heroLbl{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;
+  font-weight:800;color:#04121a;background:linear-gradient(135deg,var(--acc),var(--acc2));
+  padding:3px 10px;border-radius:6px;margin-bottom:8px}
 .card .meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .src{font-size:11px;font-weight:800;padding:3px 9px;border-radius:6px;
   background:rgba(63,169,245,.15);color:var(--acc2)}
 .src.fb{background:rgba(66,103,178,.18);color:#7ea3e0}
 .src.x{background:rgba(29,161,242,.15);color:#5cc0f7}
 .src.gov{background:rgba(212,175,55,.15);color:var(--gold)}
+.src.agg{background:rgba(167,139,250,.15);color:var(--agg)}
 .src.manual{background:rgba(245,166,35,.15);color:var(--warn)}
-.time{font-size:11px;color:var(--mut)}
+.via{font-size:10px;color:var(--mut);opacity:.8}
+.time{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:4px}
+.fdot{width:6px;height:6px;border-radius:50%;background:var(--mut);display:inline-block}
+.fdot.f1{background:var(--acc);box-shadow:0 0 6px var(--acc)}
+.fdot.f2{background:var(--acc2)}
+.newbadge{font-size:10px;font-weight:900;color:#04121a;background:var(--acc);
+  padding:2px 8px;border-radius:5px;animation:pulse 1.6s infinite}
 .card h3{font-family:'Cairo';font-weight:700;font-size:16px;margin-bottom:6px;line-height:1.45}
 .card p{color:var(--mut);font-size:13.5px}
-html[data-theme="light"] .card p{color:#42627a}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .tag{font-size:11px;background:rgba(34,211,168,.1);color:var(--acc);
   padding:3px 8px;border-radius:6px;font-weight:700}
 .card .acts{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .card .acts a,.card .acts button{flex:1;text-align:center;text-decoration:none;
   background:var(--panel2);border:1px solid var(--line);color:var(--txt);
-  padding:9px;border-radius:9px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
-.card .acts a:active,.card .acts button:active{background:var(--acc);color:#04121a}
+  padding:9px;border-radius:9px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
+.card .acts a:active,.card .acts button:active{background:var(--acc);color:#04121a;transform:scale(.97)}
 .empty{text-align:center;padding:60px 20px;color:var(--mut)}
 .empty svg{width:64px;height:64px;opacity:.4;margin-bottom:14px}
-.loader{text-align:center;padding:40px;color:var(--mut)}
-.loader .bar{width:160px;height:4px;background:var(--panel);border-radius:4px;
-  margin:14px auto;overflow:hidden}
-.loader .bar i{display:block;height:100%;width:40%;background:var(--acc);
-  border-radius:4px;animation:slide 1.1s infinite}
-@keyframes slide{0%{margin-inline-start:-40%}100%{margin-inline-start:100%}}
+/* skeleton loader */
+.skel{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
+  border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.skel .ln{height:12px;border-radius:6px;margin-bottom:10px;
+  background:linear-gradient(90deg,var(--skel1) 25%,var(--skel2) 50%,var(--skel1) 75%);
+  background-size:200% 100%;animation:shim 1.3s infinite}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel .ln.w40{width:40%}.skel .ln.w90{width:90%;height:16px}.skel .ln.w70{width:70%}.skel .ln.w55{width:55%;margin-bottom:0}
+/* pull to refresh */
+.ptr{position:fixed;top:-60px;left:50%;transform:translateX(-50%);z-index:60;
+  width:44px;height:44px;border-radius:50%;background:var(--panel2);border:1px solid var(--acc);
+  display:grid;place-items:center;transition:top .2s;box-shadow:var(--sh)}
+.ptr svg{width:20px;height:20px;color:var(--acc)}
+.ptr.go svg{animation:rot 1s linear infinite}
+/* scroll top */
+.totop{position:fixed;bottom:100px;inset-inline-start:16px;z-index:49;width:42px;height:42px;
+  border-radius:50%;background:var(--panel2);border:1px solid var(--line);color:var(--acc);
+  display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh);
+  opacity:0;pointer-events:none;transition:.3s;transform:translateY(10px)}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop svg{width:18px;height:18px}
 /* ===== Bottom nav ===== */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:50;
   background:linear-gradient(0deg,var(--navg),var(--navg2));
@@ -174,8 +235,12 @@ nav button.on{color:var(--acc)}
 .srclist{margin-top:10px}
 .srcrow{display:flex;align-items:center;gap:10px;background:var(--panel);
   border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+.srcrow .st{width:9px;height:9px;border-radius:50%;flex:0 0 9px;background:var(--mut);opacity:.5}
+.srcrow .st.ok{background:var(--acc);opacity:1;box-shadow:0 0 6px rgba(34,211,168,.5)}
+.srcrow .st.bad{background:var(--danger);opacity:1}
 .srcrow .nm{flex:1;font-size:13.5px;font-weight:700}
 .srcrow .ty{font-size:11px;color:var(--mut)}
+.srcrow .cnt{font-size:11px;color:var(--acc2);font-weight:700;white-space:nowrap}
 .srcrow .del{color:var(--danger);cursor:pointer;font-weight:900;font-size:18px}
 .tabbtns{display:flex;gap:8px;margin-bottom:14px}
 .tabbtns button{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--mut);
@@ -184,7 +249,7 @@ nav button.on{color:var(--acc)}
 .toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
   background:var(--panel2);border:1px solid var(--acc);color:var(--txt);
   padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:700;z-index:200;
-  box-shadow:var(--sh);opacity:0;pointer-events:none;transition:.3s}
+  box-shadow:var(--sh);opacity:0;pointer-events:none;transition:.3s;white-space:nowrap}
 .toast.show{opacity:1;bottom:108px}
 .note{background:rgba(63,169,245,.08);border:1px solid rgba(63,169,245,.25);
   border-radius:10px;padding:11px 13px;font-size:12.5px;color:#aacbe6;margin-bottom:14px;line-height:1.7}
@@ -214,19 +279,34 @@ nav button.on{color:var(--acc)}
     <input id="q" type="search" placeholder="ابحث في الأخبار… (مثال: ترعة الإسماعيلية)">
     <button onclick="doSearch()">بحث</button>
   </div>
-  <div class="chips" id="chips"></div>
+  <div class="waterline" id="waterline"><i></i></div>
 </header>
 
+<div class="chips" id="chips"></div>
+
 <main>
-  <div class="toolbar">
-    <div class="count" id="count">جارٍ التحميل…</div>
+  <div class="windowbar">
+    <div class="seg" id="winSeg">
+      <button data-w="1" onclick="setWindow(1)">اليوم</button>
+      <button data-w="3" onclick="setWindow(3)">٣ أيام</button>
+      <button data-w="7" class="on" onclick="setWindow(7)">أسبوع</button>
+    </div>
     <button class="refresh" id="refreshBtn" onclick="loadFeed()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
       تحديث
     </button>
   </div>
+  <div class="stats" id="stats">جارٍ التحميل…</div>
   <div id="feed"></div>
 </main>
+
+<button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="للأعلى">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<div class="ptr" id="ptr">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+</div>
 
 <nav>
   <button class="on" data-tab="feed" onclick="switchTab('feed')">
@@ -290,13 +370,13 @@ nav button.on{color:var(--acc)}
     </div>
 
     <div id="st-src" style="display:none">
-      <div class="note">⭐ <b>الحل النهائي (موصى به):</b> اعمل Cloudflare Worker مجاني والصق رابطه هنا. الـ Worker بيجيب كل الأخبار ويفلتر أخبار الري لوحده ويرجّعها جاهزة — بدون أي مشاكل. افتح ملف <b>cloudflare-worker.js</b> فيه الكود وخطوات التركيب بالتفصيل.</div>
+      <div class="note">⭐ <b>الحل النهائي (موصى به):</b> اعمل Cloudflare Worker مجاني والصق رابطه هنا. الـ Worker بيجيب كل الأخبار ويفلتر أخبار الري لوحده ويرجّعها جاهزة — بدون أي مشاكل.</div>
       <div class="field"><label>رابط الـ Worker الخاص بك (بروكسي ثابت)</label>
         <input id="proxy-url" type="url" placeholder="https://xxx.workers.dev" dir="ltr">
       </div>
       <button class="btn" onclick="saveProxy()">حفظ البروكسي</button>
       <div style="height:14px"></div>
-      <div class="note">مصادر RSS للمواقع الإخبارية. التطبيق بيجيب منها ويفلتر بالكلمات المفتاحية.</div>
+      <div class="note">النقطة الخضرا = المصدر اشتغل في آخر تحديث وجاب أخبار. مصادر 🛰️ بتجمع من عشرات الجرائد المصرية عن طريق جوجل أخبار وبتجيب آخر أسبوع بس.</div>
       <div class="field"><label>اسم المصدر</label><input id="src-nm" placeholder="مثال: بوابة الأهرام"></div>
       <div class="field"><label>رابط RSS</label><input id="src-url" type="url" placeholder="https://…/rss" dir="ltr"></div>
       <button class="btn" onclick="addSrc()">إضافة مصدر</button>
@@ -313,25 +393,46 @@ nav button.on{color:var(--acc)}
 <script>
 /* ============ STATE ============ */
 const LS = {
-  kw:'irn_keywords', src:'irn_sources', saved:'irn_saved', manual:'irn_manual', cache:'irn_cache'
+  kw:'irn_keywords', src:'irn_sources', saved:'irn_saved', manual:'irn_manual',
+  cache:'irn_cache', win:'irn_window', srcv:'irn_srcv', last:'irn_lastupd'
 };
 const DEFAULT_KW = ['ترعة','ترع','مصرف','مصارف','الري','وزارة الموارد المائية','نهر النيل',
   'تطهير','حصة مائية','تعدٍ على','شبكة الري','مياه الشرب','السد العالي','مفيض','حياة كريمة',
   'تبطين','منشآت مائية','الإسماعيلية','المنصورية','قناطر'];
+
+/* مصادر متنوعة: RSS مباشر + 5 موجزات جوجل أخبار (كل موجز بيجمع من عشرات الجرائد، آخر 7 أيام فقط when:7d) */
+function gnURL(q){return 'https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:7d')+'&hl=ar&gl=EG&ceid=EG:ar'}
 const DEFAULT_SRC = [
   {nm:'اليوم السابع', url:'https://www.youm7.com/rss/SectionRss?SectionID=88', ty:'news'},
   {nm:'بوابة الأهرام', url:'https://gate.ahram.org.eg/rss/4.aspx', ty:'news'},
   {nm:'الوطن', url:'https://www.elwatannews.com/feeds', ty:'news'},
   {nm:'صدى البلد', url:'https://www.elbalad.news/rss/all', ty:'news'},
-  {nm:'جوجل أخبار - الري', url:'https://news.google.com/rss/search?q=%D8%A7%D9%84%D8%B1%D9%8A+%D8%A7%D9%84%D8%AA%D8%B1%D8%B9+%D8%A7%D9%84%D9%85%D8%B5%D8%A7%D8%B1%D9%81&hl=ar&gl=EG&ceid=EG:ar', ty:'gov'},
+  {nm:'🛰️ وزارة الري', url:gnURL('"وزارة الموارد المائية والري" OR "وزير الري"'), ty:'agg'},
+  {nm:'🛰️ الترع والتطهير', url:gnURL('ترعة OR تطهير الترع OR تبطين الترع مصر'), ty:'agg'},
+  {nm:'🛰️ المصارف والصرف', url:gnURL('مصرف زراعي OR "شبكة الصرف" OR صرف زراعي مصر'), ty:'agg'},
+  {nm:'🛰️ النيل والسدود', url:gnURL('"السد العالي" OR "سد النهضة" OR "إيراد النيل" OR "فيضان النيل"'), ty:'agg'},
+  {nm:'🛰️ مياه الشرب والتعديات', url:gnURL('"مياه الشرب" OR "تعديات على النيل" OR "تعديات على الترع" مصر'), ty:'agg'},
 ];
 let KW = load(LS.kw, DEFAULT_KW);
 let SRC = load(LS.src, DEFAULT_SRC);
 let SAVED = load(LS.saved, []);
 let MANUAL = load(LS.manual, []);
+let WIN_DAYS = +(localStorage.getItem(LS.win)||7);
 let activeChip = 'all';
 let currentTab = 'feed';
 let allItems = [];
+let SRC_STATUS = {};   // صحة كل مصدر: {ok, count}
+let LAST_UPD = +(localStorage.getItem(LS.last)||0);
+let _loading=false;
+
+/* ترقية المصادر: لو نسخة المصادر قديمة، ندمج الافتراضيات الجديدة ونحافظ على إضافات المستخدم */
+(function migrateSrc(){
+  if(localStorage.getItem(LS.srcv)==='2') return;
+  const oldDefaults=['youm7.com','ahram.org.eg','elwatannews.com','elbalad.news','news.google.com'];
+  const userAdded = (load(LS.src,[])||[]).filter(s=>!oldDefaults.some(d=>(s.url||'').includes(d)));
+  SRC = DEFAULT_SRC.concat(userAdded);
+  save(LS.src,SRC); localStorage.setItem(LS.srcv,'2');
+})();
 
 function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}catch{return d}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
@@ -347,26 +448,26 @@ function buildProxies(){
   arr.push(
     u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
     u=>`https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
-    u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-    u=>`https://thingproxy.freeboard.io/fetch/${u}`
+    u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`
   );
   return arr;
 }
 let PROXIES = buildProxies();
-let _fetchStats={ok:0,fail:0};
 
 async function fetchRSS(url){
   for(const p of PROXIES){
     try{
-      const r = await fetch(p(url),{cache:'no-store'});
+      const ctrl=new AbortController();
+      const tm=setTimeout(()=>ctrl.abort(),12000);
+      const r = await fetch(p(url),{cache:'no-store',signal:ctrl.signal});
+      clearTimeout(tm);
       if(!r.ok) continue;
       const txt = await r.text();
       const items = parseRSS(txt);
-      if(items.length){_fetchStats.ok++;return items;}
-    }catch(e){/* try next */}
+      if(items.length) return items;
+    }catch(e){/* try next proxy */}
   }
-  _fetchStats.fail++;
-  return [];
+  return null; // فشل المصدر
 }
 function parseRSS(txt){
   const out=[];
@@ -380,12 +481,37 @@ function parseRSS(txt){
       const la=n.querySelector('link');
       if(!link && la) link=la.getAttribute('href')||'';
       let desc=(g('description')||g('summary')||g('content')).replace(/<[^>]+>/g,'').trim();
-      const title=g('title');
+      let title=g('title');
       const pub=g('pubDate')||g('published')||g('updated');
-      if(title) out.push({title,desc:desc.slice(0,240),link,pub,t:pub?new Date(pub).getTime():Date.now()});
+      // جوجل أخبار: اسم الجريدة الأصلية في <source>، والعنوان بيتذيّل بـ " - اسم الجريدة"
+      let outlet=g('source');
+      if(outlet && title.endsWith(' - '+outlet)) title=title.slice(0,-(' - '+outlet).length).trim();
+      const t = pub ? Date.parse(pub) : NaN;
+      if(title) out.push({title,desc:desc.slice(0,240),link,pub,t,outlet});
     });
   }catch(e){}
   return out;
+}
+
+/* ============ دقة الزمن: فلتر النافذة الإجباري ============ */
+function freshOnly(items){
+  const now=Date.now(), max=WIN_DAYS*86400000;
+  return items.filter(it=>{
+    if(it.manual) return (now-(it.t||0))<=7*86400000;     // اليدوي: أسبوع كحد أقصى
+    if(!it.t || isNaN(it.t)) return false;                 // بدون تاريخ صالح → مرفوض
+    if(it.t > now+3600000) return false;                   // تاريخ مستقبلي → مرفوض
+    return (now-it.t) <= max;
+  });
+}
+/* تطبيع عربي لمنع تكرار نفس الخبر من مصدرين */
+function normTitle(s){
+  return (s||'').replace(/[\u064B-\u0652\u0640]/g,'')
+    .replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
+    .replace(/["'«»“”]/g,'').replace(/\s+/g,' ').trim().toLowerCase().slice(0,70);
+}
+function dedupe(items){
+  const seen=new Set();
+  return items.filter(r=>{const k=normTitle(r.title);if(!k||seen.has(k))return false;seen.add(k);return true});
 }
 
 /* ============ Keyword filter ============ */
@@ -400,69 +526,101 @@ function matchedTags(item){
 }
 
 /* ============ Load feed ============ */
-async function loadFeed(){
+async function loadFeed(silent){
+  if(_loading) return; _loading=true;
   const btn=document.getElementById('refreshBtn');btn.classList.add('spin');
+  document.getElementById('waterline').classList.add('on');
   const feed=document.getElementById('feed');
-  feed.innerHTML='<div class="loader">جارٍ جلب الأخبار من المصادر…<div class="bar"><i></i></div></div>';
-  document.getElementById('count').textContent='جارٍ التحميل…';
-  _fetchStats={ok:0,fail:0};
+  if(!silent){
+    feed.innerHTML = Array(5).fill('<div class="skel"><div class="ln w40"></div><div class="ln w90"></div><div class="ln w70"></div><div class="ln w55"></div></div>').join('');
+    document.getElementById('stats').textContent='جارٍ جلب الأخبار من '+SRC.length+' مصادر…';
+  }
+  SRC_STATUS={};
+  const prevCount = allItems.length;
 
   let results=[];
-  let rawCount=0;
   let usedWorker=false;
 
-  // (1) لو فيه Worker: نجيب JSON جاهز ومفلتر مرة واحدة
+  // (1) لو فيه Worker: نجيب JSON جاهز مرة واحدة
   if(USER_PROXY){
     try{
       const r=await fetch(USER_PROXY.replace(/\/+$/,'')+'/?_t='+Date.now(),{cache:'no-store'});
       if(r.ok){
         const data=await r.json();
-        if(data&&Array.isArray(data.items)){
-          results=data.items;rawCount=results.length;usedWorker=true;_fetchStats.ok=data.sources_ok||1;
+        if(data&&Array.isArray(data.items)&&data.items.length){
+          // تطبيع: نضمن وجود timestamp صالح قبل الفلتر الزمني
+          const norm=data.items.map(it=>({...it,
+            t:(it.t&&!isNaN(it.t))?it.t:(it.pub?Date.parse(it.pub):NaN),
+            srcType:it.srcType||'agg',
+            srcName:it.srcName||it.outlet||'مصدر'}));
+          const withDates=norm.filter(it=>it.t&&!isNaN(it.t)).length;
+          // لو الـ Worker مش بيرجع تواريخ أصلًا، نتجاهله ونجيب مباشر (عشان الفلتر الزمني ميمسحش كل حاجة)
+          if(withDates>0){
+            results=norm;usedWorker=true;
+            SRC_STATUS['__worker']={ok:true,count:norm.length};
+          }
         }
       }
     }catch(e){/* fallback */}
   }
 
-  // (2) احتياطي: بروكسيات + RSS مباشر
+  // (2) جلب مباشر من كل المصادر بالتوازي + تتبع صحة كل مصدر
   if(!usedWorker){
-    const tasks = SRC.map(s=>fetchRSS(s.url).then(items=>items.map(it=>({...it,srcName:s.nm,srcType:s.ty}))));
+    const tasks = SRC.map(s=>fetchRSS(s.url).then(items=>{
+      if(items===null){SRC_STATUS[s.nm]={ok:false,count:0};return[]}
+      SRC_STATUS[s.nm]={ok:true,count:items.length};
+      return items.map(it=>({...it,srcName:it.outlet||s.nm,srcType:s.ty,via:it.outlet?s.nm:''}));
+    }));
     const settled = await Promise.allSettled(tasks);
     settled.forEach(r=>{if(r.status==='fulfilled') results=results.concat(r.value)});
-    rawCount = results.length;
-    // dedupe + keyword filter (الـ Worker بيعملهم بنفسه)
-    const seen=new Set();
-    results = results.filter(r=>{const k=r.title.slice(0,60);if(seen.has(k))return false;seen.add(k);return true});
     results = results.filter(matchKW);
   }
 
+  // ✅ الدقة: فلتر النافذة الزمنية + إزالة التكرار (تنطبق حتى على نتائج الـ Worker)
+  results = freshOnly(results);
+  results = dedupe(results);
+
   // الأخبار اليدوية دايمًا فوق
-  const manualItems = MANUAL.map(m=>({...m,srcType:m.src,srcName:srcLabel(m.src),manual:true}));
+  const manualItems = freshOnly(MANUAL.map(m=>({...m,srcType:m.src,srcName:srcLabel(m.src),manual:true})));
   results = manualItems.concat(results);
   results.sort((a,b)=>(b.t||0)-(a.t||0));
 
   allItems = results;
-  save(LS.cache, results.slice(0,60));
+  save(LS.cache, results.slice(0,80));
+  LAST_UPD=Date.now();localStorage.setItem(LS.last,LAST_UPD);
   btn.classList.remove('spin');
-  renderFeed();
+  document.getElementById('waterline').classList.remove('on');
+  _loading=false;
+  renderFeed();renderStats();
+
+  if(silent && results.length>prevCount) toast(`وصل ${results.length-prevCount} خبر جديد 🔔`);
+
   if(!results.length){
     const isLocal = location.protocol==='file:' || location.protocol==='content:';
+    const okSrcs = Object.values(SRC_STATUS).filter(s=>s.ok).length;
     let msg;
     if(isLocal){
       msg='⚠️ التطبيق متفتّح كملف محلي.<br>افتحه من سيرفر (GitHub Pages / Firebase) بـ https.';
-    } else if(USER_PROXY && _fetchStats.ok===0){
-      msg='الـ Worker رجع فاضي. تأكد إن الرابط صح ومتفعّل، وافتحه في المتصفح للتجربة.';
-    } else if(!USER_PROXY){
-      msg='البروكسيات المجانية مشغولة.<br><b>الحل النهائي:</b> اعمل Cloudflare Worker وحُط رابطه في الإعدادات ← المصادر (الملف cloudflare-worker.js فيه الخطوات).';
+    } else if(okSrcs===0){
+      msg='كل المصادر مش راضية ترد دلوقتي.<br>جرّب تحديث تاني بعد دقيقة، أو فعّل Cloudflare Worker من الإعدادات ← المصادر.';
     } else {
-      msg='مفيش أخبار مطابقة دلوقتي. جرّب تحديث تاني أو غيّر الكلمات المفتاحية.';
+      msg=`مفيش أخبار مطابقة خلال آخر ${winLabel()}.<br>وسّع النافذة الزمنية أو عدّل الكلمات المفتاحية.`;
     }
     feed.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><div>${msg}</div></div>`;
   }
 }
 
-function srcLabel(t){return {news:'موقع إخباري',fb:'فيسبوك',x:'إكس',gov:'جهة رسمية',manual:'إدخال يدوي'}[t]||'مصدر'}
-function srcClass(t){return {news:'',fb:'fb',x:'x',gov:'gov',manual:'manual'}[t]||''}
+function winLabel(){return WIN_DAYS===1?'٢٤ ساعة':WIN_DAYS===3?'٣ أيام':'أسبوع'}
+function setWindow(d){
+  WIN_DAYS=d;localStorage.setItem(LS.win,d);
+  document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===d));
+  // إعادة فلترة فورية بدون جلب جديد
+  allItems=freshOnly(allItems);renderFeed();renderStats();
+  toast('عرض أخبار آخر '+winLabel());
+}
+
+function srcLabel(t){return {news:'موقع إخباري',fb:'فيسبوك',x:'إكس',gov:'جهة رسمية',agg:'متعدد المصادر',manual:'إدخال يدوي'}[t]||'مصدر'}
+function srcClass(t){return {news:'',fb:'fb',x:'x',gov:'gov',agg:'agg',manual:'manual'}[t]||''}
 function timeAgo(t){
   if(!t) return '';
   const d=Date.now()-t,m=60000,h=3600000,day=86400000;
@@ -472,51 +630,102 @@ function timeAgo(t){
   if(d<day*7) return `منذ ${Math.floor(d/day)} يوم`;
   return new Date(t).toLocaleDateString('ar-EG');
 }
+function fdotClass(t){
+  const d=Date.now()-t;
+  if(d<86400000) return 'f1';      // أقل من يوم
+  if(d<3*86400000) return 'f2';    // أقل من 3 أيام
+  return '';
+}
 
-/* ============ Render ============ */
+/* ============ Stats strip ============ */
+function renderStats(){
+  const st=document.getElementById('stats');
+  const names=Object.keys(SRC_STATUS).filter(k=>k!=='__worker');
+  const ok=names.filter(n=>SRC_STATUS[n].ok).length;
+  const worker=SRC_STATUS['__worker'];
+  const distinct=new Set(allItems.filter(i=>!i.manual).map(i=>i.srcName)).size;
+  let parts=[`<b>${allItems.length}</b> خبر خلال ${winLabel()}`];
+  if(distinct>1) parts.push(`من <b>${distinct}</b> جريدة/جهة`);
+  if(worker) parts.push(`<span class="srcok">⭐ Worker شغّال</span>`);
+  else if(names.length) parts.push(ok===names.length
+    ?`<span class="srcok">المصادر ${ok}/${names.length} ✓</span>`
+    :`<span class="${ok? 'srcok':'srcbad'}">المصادر ${ok}/${names.length}</span>`);
+  if(LAST_UPD) parts.push(`آخر تحديث ${timeAgo(LAST_UPD)}`);
+  st.innerHTML=parts.join('<span class="sep"> · </span>');
+}
+
+/* ============ Render (مجمّع باليوم + Hero) ============ */
+function dayKey(t){const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()}
+function dayTitle(t){
+  const now=new Date(), d=new Date(t);
+  const today=dayKey(now.getTime());
+  const yest=dayKey(now.getTime()-86400000);
+  if(dayKey(t)===today) return 'اليوم';
+  if(dayKey(t)===yest) return 'أمس';
+  return d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+}
+function cardHTML(it,i,tab,isHero){
+  const tags=matchedTags(it);
+  const isSaved=SAVED.some(s=>normTitle(s.title)===normTitle(it.title));
+  const isNew=it.t && (Date.now()-it.t)<6*3600000;
+  return `<article class="card s-${srcClass(it.srcType)} ${isHero?'hero':''}" style="animation-delay:${Math.min(i,12)*.03}s">
+    ${isHero?'<div class="heroLbl">⚡ أحدث خبر</div>':''}
+    <div class="meta">
+      <span class="src ${srcClass(it.srcType)}">${esc(it.srcName||srcLabel(it.srcType))}</span>
+      ${it.via?`<span class="via">عبر ${esc(it.via)}</span>`:''}
+      <span class="time"><span class="fdot ${fdotClass(it.t)}"></span>${timeAgo(it.t)}</span>
+      ${isNew?'<span class="newbadge">جديد</span>':''}
+    </div>
+    <h3>${esc(it.title)}</h3>
+    ${it.desc?`<p>${esc(it.desc)}</p>`:''}
+    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="acts">
+      ${it.link?`<a href="${it.link}" target="_blank" rel="noopener">فتح المصدر</a>`:''}
+      <button onclick='toggleSave(${i},"${tab}")'>${isSaved?'★ محفوظ':'☆ حفظ'}</button>
+      <button onclick='shareItem(${i},"${tab}")'>مشاركة</button>
+    </div>
+  </article>`;
+}
 function renderFeed(){
   const feed=document.getElementById('feed');
   let items = currentTab==='saved' ? SAVED : allItems;
   if(activeChip!=='all' && currentTab==='feed'){
     items = items.filter(i=>{
-      if(activeChip==='_src_news') return !i.srcType||i.srcType==='news';
-      if(activeChip==='_src_gov') return i.srcType==='gov';
+      if(activeChip==='_src_news') return i.srcType==='news'||!i.srcType;
+      if(activeChip==='_src_agg') return i.srcType==='agg'||i.srcType==='gov';
       if(activeChip==='_src_social') return i.srcType==='fb'||i.srcType==='x';
       const hay=(i.title+' '+(i.desc||'')).toLowerCase();
       return hay.includes(activeChip.toLowerCase());
     });
   }
-  document.getElementById('count').innerHTML = currentTab==='saved'
-    ? `<b>${items.length}</b> خبر محفوظ`
-    : `<b>${items.length}</b> خبر · ${SRC.length} مصدر`;
+  if(currentTab==='saved'){
+    document.getElementById('stats').innerHTML=`<b>${items.length}</b> خبر محفوظ`;
+  }
 
   if(!items.length){
-    feed.innerHTML = currentTab==='saved'
-      ? '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><div>مفيش أخبار محفوظة لسه.</div></div>'
-      : feed.innerHTML;
-    if(currentTab==='saved') return;
-    if(items.length===0 && allItems.length) {feed.innerHTML='<div class="empty"><div>مفيش نتائج للفلتر ده.</div></div>';}
+    if(currentTab==='saved'){
+      feed.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><div>مفيش أخبار محفوظة لسه.<br>دوس ☆ على أي خبر يهمك.</div></div>';
+      return;
+    }
+    if(allItems.length){feed.innerHTML='<div class="empty"><div>مفيش نتائج للفلتر ده.</div></div>'}
     return;
   }
 
-  feed.innerHTML = items.map((it,i)=>{
-    const tags=matchedTags(it);
-    const isSaved=SAVED.some(s=>s.title===it.title);
-    return `<article class="card s-${srcClass(it.srcType)}" style="animation-delay:${i*.03}s">
-      <div class="meta">
-        <span class="src ${srcClass(it.srcType)}">${it.srcName||srcLabel(it.srcType)}</span>
-        <span class="time">${timeAgo(it.t)}</span>
-      </div>
-      <h3>${esc(it.title)}</h3>
-      ${it.desc?`<p>${esc(it.desc)}</p>`:''}
-      ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
-      <div class="acts">
-        ${it.link?`<a href="${it.link}" target="_blank" rel="noopener">فتح المصدر</a>`:''}
-        <button onclick='toggleSave(${i},"${currentTab}")'>${isSaved?'★ محفوظ':'☆ حفظ'}</button>
-        <button onclick='shareItem(${i},"${currentTab}")'>مشاركة</button>
-      </div>
-    </article>`;
-  }).join('');
+  // فهرسة الأصل عشان الحفظ/المشاركة تشتغل صح مع التجميع
+  const baseList = currentTab==='saved'?SAVED:allItems;
+  const idxOf = it=>baseList.indexOf(it);
+
+  let html='', lastDay='';
+  items.forEach((it,vi)=>{
+    const dk=dayKey(it.t||Date.now());
+    if(currentTab==='feed' && dk!==lastDay){
+      lastDay=dk;
+      const cnt=items.filter(x=>dayKey(x.t||Date.now())===dk).length;
+      html+=`<div class="dayhdr">${dayTitle(it.t||Date.now())}<span class="dc">${cnt}</span></div>`;
+    }
+    html+=cardHTML(it, idxOf(it), currentTab, currentTab==='feed'&&vi===0&&activeChip==='all');
+  });
+  feed.innerHTML=html;
 }
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
@@ -524,7 +733,7 @@ function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>'
 function toggleSave(i,tab){
   const list = tab==='saved'?SAVED:allItems;
   const it=list[i];if(!it)return;
-  const idx=SAVED.findIndex(s=>s.title===it.title);
+  const idx=SAVED.findIndex(s=>normTitle(s.title)===normTitle(it.title));
   if(idx>=0){SAVED.splice(idx,1);toast('أُزيل من المحفوظ')}
   else{SAVED.unshift(it);toast('تم الحفظ ★')}
   save(LS.saved,SAVED);renderFeed();
@@ -537,27 +746,21 @@ function shareItem(i,tab){
 }
 function doSearch(){
   const q=document.getElementById('q').value.trim().toLowerCase();
-  if(!q){activeChip='all';renderFeed();return}
+  if(!q){activeChip='all';renderFeed();renderStats();return}
   const feed=document.getElementById('feed');
   const items=allItems.filter(i=>(i.title+' '+(i.desc||'')).toLowerCase().includes(q));
-  document.getElementById('count').innerHTML=`<b>${items.length}</b> نتيجة لـ "${esc(q)}"`;
-  feed.innerHTML = items.length? items.map((it,i)=>{
-    const tags=matchedTags(it);
-    return `<article class="card s-${srcClass(it.srcType)}">
-      <div class="meta"><span class="src ${srcClass(it.srcType)}">${it.srcName||srcLabel(it.srcType)}</span><span class="time">${timeAgo(it.t)}</span></div>
-      <h3>${esc(it.title)}</h3>${it.desc?`<p>${esc(it.desc)}</p>`:''}
-      ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
-      <div class="acts">${it.link?`<a href="${it.link}" target="_blank">فتح المصدر</a>`:''}<button onclick='shareSearch(${i})'>مشاركة</button></div>
-    </article>`}).join('')
+  document.getElementById('stats').innerHTML=`<b>${items.length}</b> نتيجة لـ "${esc(q)}"`;
+  feed.innerHTML = items.length? items.map((it,i)=>cardHTML(it,allItems.indexOf(it),'feed',false)).join('')
     : '<div class="empty"><div>مفيش نتائج.</div></div>';
-  window._searchRes=items;
 }
-function shareSearch(i){const it=window._searchRes[i];if(!it)return;const text=`${it.title}\n${it.link||''}`;navigator.share?navigator.share({title:it.title,text:it.desc||'',url:it.link||''}).catch(()=>{}):(navigator.clipboard.writeText(text),toast('تم النسخ'))}
+let _qT;
+document.getElementById('q').addEventListener('input',()=>{clearTimeout(_qT);_qT=setTimeout(doSearch,350)});
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
 
 /* ============ Chips ============ */
 function renderChips(){
   const c=document.getElementById('chips');
-  const fixed=[{id:'all',l:'الكل'},{id:'_src_news',l:'📰 مواقع'},{id:'_src_gov',l:'🏛️ رسمي'},{id:'_src_social',l:'📱 سوشيال'}];
+  const fixed=[{id:'all',l:'الكل'},{id:'_src_news',l:'📰 مواقع'},{id:'_src_agg',l:'🛰️ متعدد المصادر'},{id:'_src_social',l:'📱 سوشيال'}];
   const kwc=KW.slice(0,8).map(k=>({id:k,l:k}));
   c.innerHTML=[...fixed,...kwc].map(x=>`<div class="chip ${activeChip===x.id?'on':''}" onclick="setChip('${x.id.replace(/'/g,"")}')">${x.l}</div>`).join('');
 }
@@ -568,6 +771,7 @@ function switchTab(t){
   currentTab=t;activeChip='all';
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   renderChips();renderFeed();
+  if(t==='feed')renderStats();
 }
 
 /* ============ Sheets ============ */
@@ -610,9 +814,14 @@ function addKw(){
 function delKw(i){KW.splice(i,1);save(LS.kw,KW);renderKw();renderChips()}
 document.getElementById('kw-in').addEventListener('keydown',e=>{if(e.key==='Enter')addKw()});
 
-/* ============ Sources ============ */
+/* ============ Sources (مع مؤشر الصحة) ============ */
 function renderSrc(){
-  document.getElementById('srclist').innerHTML=SRC.map((s,i)=>`<div class="srcrow"><div class="nm">${esc(s.nm)}<div class="ty">${srcLabel(s.ty)}</div></div><div class="del" onclick="delSrc(${i})">×</div></div>`).join('');
+  document.getElementById('srclist').innerHTML=SRC.map((s,i)=>{
+    const st=SRC_STATUS[s.nm];
+    const cls=st? (st.ok?'ok':'bad') : '';
+    const cnt=st&&st.ok? `${st.count} خبر` : (st? 'فشل ✗':'');
+    return `<div class="srcrow"><span class="st ${cls}"></span><div class="nm">${esc(s.nm)}<div class="ty">${srcLabel(s.ty)}</div></div><span class="cnt">${cnt}</span><div class="del" onclick="delSrc(${i})">×</div></div>`;
+  }).join('');
 }
 function addSrc(){
   const nm=document.getElementById('src-nm').value.trim();
@@ -635,8 +844,6 @@ function saveProxy(){
 let toastT;
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
 
-document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
-
 /* ============ Theme ============ */
 const SUN='<path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/><circle cx="12" cy="12" r="4"/>';
 const MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
@@ -651,12 +858,45 @@ function toggleTheme(){
 }
 applyTheme(localStorage.getItem('irn_theme')||'dark');
 
+/* ============ سحب للتحديث + زر الصعود ============ */
+(function(){
+  const ptr=document.getElementById('ptr');
+  let startY=0,pulling=false;
+  document.addEventListener('touchstart',e=>{
+    if(window.scrollY<=2 && currentTab==='feed'){startY=e.touches[0].clientY;pulling=true}
+  },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!pulling)return;
+    const dy=e.touches[0].clientY-startY;
+    if(dy>10) ptr.style.top=Math.min(dy*0.4-50,28)+'px';
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(!pulling)return;pulling=false;
+    const dy=e.changedTouches[0].clientY-startY;
+    if(dy>140 && !_loading){ptr.classList.add('go');ptr.style.top='20px';
+      loadFeed();
+      setTimeout(()=>{ptr.classList.remove('go');ptr.style.top='-60px'},1500);
+    }else{ptr.style.top='-60px'}
+  },{passive:true});
+
+  const tt=document.getElementById('totop');
+  window.addEventListener('scroll',()=>{tt.classList.toggle('show',window.scrollY>600)},{passive:true});
+})();
+
+/* ============ تحديث تلقائي كل 10 دقائق ============ */
+setInterval(()=>{if(!document.hidden && currentTab==='feed' && !_loading) loadFeed(true)}, 10*60*1000);
+document.addEventListener('visibilitychange',()=>{
+  // لو رجع للتطبيق بعد أكتر من 15 دقيقة → تحديث صامت
+  if(!document.hidden && Date.now()-LAST_UPD>15*60*1000 && !_loading) loadFeed(true);
+});
+
 /* ============ Init ============ */
 function init(){
+  document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===WIN_DAYS));
   renderChips();
-  const cached=load(LS.cache,[]);
-  if(cached.length){allItems=cached;renderFeed()}
-  loadFeed();
+  const cached=freshOnly(load(LS.cache,[]));
+  if(cached.length){allItems=cached;renderFeed();renderStats()}
+  loadFeed(cached.length>0);
 }
 init();
 
