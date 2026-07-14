@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b1a2a">
 <title>رصد أخبار الري والترع والمصارف</title>
-<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -19,6 +18,7 @@
   --hdr1:rgba(11,26,42,.97); --hdr2:rgba(11,26,42,.86);
   --navg:var(--bg); --navg2:rgba(11,26,42,.95); --logotxt:#04121a;
   --skel1:#13314c; --skel2:#1a4062;
+  --ok:#22c55e; --focus:0 0 0 3px rgba(63,169,245,.28);
 }
 html[data-theme="light"]{
   --bg:#eef3f7; --bg2:#ffffff; --panel:#ffffff; --panel2:#f1f6fa;
@@ -29,6 +29,7 @@ html[data-theme="light"]{
   --hdr1:rgba(255,255,255,.97); --hdr2:rgba(238,243,247,.88);
   --navg:#ffffff; --navg2:rgba(255,255,255,.95); --logotxt:#ffffff;
   --skel1:#e4ecf3; --skel2:#f3f8fc;
+  --ok:#11883e;
 }
 html[data-theme="light"] .card{background:var(--panel)}
 html[data-theme="light"] .tag{background:rgba(10,157,124,.12)}
@@ -37,6 +38,7 @@ html[data-theme="light"] .note{background:rgba(29,127,209,.07);border-color:rgba
 html[data-theme="light"] .card p{color:#42627a}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
+html{scroll-behavior:smooth}
 body{
   font-family:'Tajawal','Cairo',sans-serif;background:
    radial-gradient(1200px 600px at 80% -10%,var(--glow1),transparent 60%),
@@ -46,6 +48,12 @@ body{
   padding-bottom:84px;transition:background .3s,color .3s;
   overscroll-behavior-y:contain;
 }
+button,input,select,textarea,a{touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:none;box-shadow:var(--focus)}
+.skip{position:fixed;top:8px;inset-inline-start:8px;z-index:999;transform:translateY(-150%);background:var(--acc);color:#04121a;padding:8px 14px;border-radius:9px;font-weight:800;text-decoration:none}
+.skip:focus{transform:none}
+.netbar{display:none;position:sticky;top:0;z-index:90;background:#8d2f2f;color:#fff;text-align:center;padding:7px 12px;font-size:12px;font-weight:800}
+.netbar.show{display:block}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
 }
@@ -57,6 +65,7 @@ header{
   padding:14px 16px calc(12px + env(safe-area-inset-top)) 16px;
   padding-top:max(14px,env(safe-area-inset-top));
 }
+.header-inner{max-width:1040px;margin:auto}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{
   width:46px;height:46px;flex:0 0 46px;border-radius:12px;
@@ -81,14 +90,17 @@ header{
 @keyframes flow{0%{transform:translateX(110%)}100%{transform:translateX(-380%)}}
 /* search */
 .searchbar{margin-top:12px;display:flex;gap:8px}
+.searchbox{position:relative;display:flex;flex:1}
 .searchbar input{
   flex:1;background:var(--panel);border:1px solid var(--line);color:var(--txt);
-  border-radius:12px;padding:11px 14px;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+  border-radius:12px;padding:11px 14px 11px 42px;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;width:100%}
 .searchbar input::placeholder{color:var(--mut)}
 .searchbar input:focus{border-color:var(--acc)}
 .searchbar button{
   background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;color:#04121a;
   font-weight:800;font-family:'Cairo';padding:0 16px;border-radius:12px;font-size:14px;cursor:pointer}
+.clear-search{position:absolute;inset-inline-end:7px;top:50%;transform:translateY(-50%);width:32px!important;height:32px;padding:0!important;background:transparent!important;color:var(--mut)!important;border-radius:8px!important;display:none;place-items:center;font-size:20px!important}
+.clear-search.show{display:grid}
 /* chips */
 .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 4px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
@@ -97,7 +109,17 @@ header{
   cursor:pointer;white-space:nowrap;transition:.2s}
 .chip.on{background:rgba(34,211,168,.16);border-color:var(--acc);color:var(--acc)}
 /* ===== Main ===== */
-main{padding:8px 16px 16px;max-width:760px;margin:0 auto}
+main{padding:8px 16px 24px;max-width:1040px;margin:0 auto}
+.overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.metric{background:linear-gradient(145deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:14px;padding:13px;min-height:82px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.metric::after{content:'';position:absolute;inset-inline-end:-18px;bottom:-28px;width:72px;height:72px;border-radius:50%;background:var(--glow1)}
+.metric .mv{font-family:'Cairo';font-size:22px;font-weight:900;line-height:1.2;color:var(--txt)}
+.metric .ml{color:var(--mut);font-size:11.5px;font-weight:700;margin-top:5px}
+.metric.good .mv{color:var(--acc)}.metric.info .mv{color:var(--acc2)}.metric.warn .mv{color:var(--warn)}
+.trustbar{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 12px;margin:2px 0 10px;font-size:12px;color:var(--mut)}
+.trustbar .shield{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:rgba(34,211,168,.12);color:var(--acc);flex:0 0 31px}
+.trustbar b{color:var(--txt)}
+.trustbar button{margin-inline-start:auto;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:700 11.5px inherit;padding:7px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
 /* time window segmented control */
 .windowbar{display:flex;align-items:center;gap:10px;margin:10px 0 6px}
 .seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:3px;flex:1;max-width:320px}
@@ -108,6 +130,8 @@ main{padding:8px 16px 16px;max-width:760px;margin:0 auto}
   border:1px solid var(--line);color:var(--txt);padding:9px 13px;border-radius:11px;
   font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-inline-start:auto}
 .refresh svg{width:15px;height:15px}
+.viewtools{display:flex;gap:8px;align-items:center;margin-inline-start:auto}
+.sortsel{background:var(--panel);border:1px solid var(--line);color:var(--txt);padding:9px 10px;border-radius:11px;font:700 12px inherit;cursor:pointer}
 .refresh.spin svg{animation:rot 1s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
 /* stats strip */
@@ -171,6 +195,9 @@ main{padding:8px 16px 16px;max-width:760px;margin:0 auto}
   background:var(--panel2);border:1px solid var(--line);color:var(--txt);
   padding:9px;border-radius:9px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
 .card .acts a:active,.card .acts button:active{background:var(--acc);color:#04121a;transform:scale(.97)}
+.card .acts .primary{background:linear-gradient(135deg,rgba(34,211,168,.18),rgba(63,169,245,.18));border-color:rgba(34,211,168,.55);color:var(--acc)}
+.linkmark{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:var(--ok);margin-inline-start:auto}
+.linkmark::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
 .empty{text-align:center;padding:60px 20px;color:var(--mut)}
 .empty svg{width:64px;height:64px;opacity:.4;margin-bottom:14px}
 /* skeleton loader */
@@ -242,6 +269,8 @@ nav button.on{color:var(--acc)}
 .srcrow .ty{font-size:11px;color:var(--mut)}
 .srcrow .cnt{font-size:11px;color:var(--acc2);font-weight:700;white-space:nowrap}
 .srcrow .del{color:var(--danger);cursor:pointer;font-weight:900;font-size:18px}
+.srcrow .probe{border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:700 11px inherit;padding:5px 8px;border-radius:7px;cursor:pointer}
+.srcrow .openhome{color:var(--acc2);text-decoration:none;font-size:11px;font-weight:800}
 .tabbtns{display:flex;gap:8px;margin-bottom:14px}
 .tabbtns button{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--mut);
   padding:9px;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
@@ -253,11 +282,37 @@ nav button.on{color:var(--acc)}
 .toast.show{opacity:1;bottom:108px}
 .note{background:rgba(63,169,245,.08);border:1px solid rgba(63,169,245,.25);
   border-radius:10px;padding:11px 13px;font-size:12.5px;color:#aacbe6;margin-bottom:14px;line-height:1.7}
+.srchealth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.healthbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.healthbox b{display:block;font-family:'Cairo';font-size:18px}.healthbox span{font-size:10.5px;color:var(--mut)}
+.sheet-head{display:flex;align-items:flex-start;gap:10px}.sheet-head>div{flex:1}.xclose{border:1px solid var(--line);background:var(--panel);color:var(--txt);width:36px;height:36px;border-radius:10px;font-size:20px;cursor:pointer}
+.link-dialog{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.72);display:none;place-items:center;padding:18px;backdrop-filter:blur(5px)}
+.link-dialog.open{display:grid}
+.link-card{width:min(100%,470px);background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 22px 70px rgba(0,0,0,.45)}
+.link-card h3{font:900 18px 'Cairo';margin-bottom:5px}.link-card p{font-size:13px;color:var(--mut);margin-bottom:12px}.link-host{direction:ltr;text-align:left;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:9px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--acc2)}
+.link-actions{display:flex;gap:8px;margin-top:14px}.link-actions button{flex:1;border:1px solid var(--line);background:var(--panel);color:var(--txt);font:800 13px inherit;padding:11px;border-radius:10px;cursor:pointer}.link-actions .go{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#04121a;border:none}
+@media (min-width:820px){
+  #feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+  #feed .dayhdr,#feed .empty{grid-column:1/-1}
+  #feed .card{margin-bottom:0}
+  #feed .hero{grid-column:1/-1}
+}
+@media (max-width:620px){
+  .brand h1{font-size:16px}.brand .sub{font-size:10.5px}.live{padding:5px 7px}.live .liveword{display:none}
+  .overview{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{min-height:73px;padding:11px}.metric .mv{font-size:20px}
+  .windowbar{flex-wrap:wrap}.seg{max-width:none;order:1;width:100%}.viewtools{margin:0;flex:1}.refresh{margin:0}.sortsel{flex:1}
+  .trustbar{align-items:flex-start}.trustbar button{padding:6px 8px}
+  .card .acts{display:grid;grid-template-columns:1.3fr 1fr 1fr}.card .acts a,.card .acts button{padding:10px 5px}
+}
 </style>
 </head>
 <body>
 
+<a class="skip" href="#feed">تجاوز إلى الأخبار</a>
+<div class="netbar" id="netbar" role="status">أنت غير متصل بالإنترنت — يتم عرض آخر نسخة محفوظة</div>
+
 <header>
+ <div class="header-inner">
   <div class="brand">
     <div class="logo">
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--logotxt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -273,28 +328,50 @@ nav button.on{color:var(--acc)}
     <button id="themeBtn" onclick="toggleTheme()" aria-label="تبديل المظهر" style="margin-inline-start:auto;background:var(--panel);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:11px;cursor:pointer;display:grid;place-items:center;flex:0 0 38px">
       <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
-    <div class="live" style="margin-inline-start:8px"><span class="dot"></span>مباشر</div>
+    <div class="live" style="margin-inline-start:8px"><span class="dot"></span><span class="liveword">مباشر</span></div>
   </div>
   <div class="searchbar">
-    <input id="q" type="search" placeholder="ابحث في الأخبار… (مثال: ترعة الإسماعيلية)">
+    <div class="searchbox">
+      <input id="q" type="search" placeholder="ابحث في الأخبار… (مثال: ترعة الإسماعيلية)" aria-label="البحث في الأخبار" autocomplete="off">
+      <button class="clear-search" id="clearSearch" onclick="clearSearch()" aria-label="مسح البحث">×</button>
+    </div>
     <button onclick="doSearch()">بحث</button>
   </div>
   <div class="waterline" id="waterline"><i></i></div>
+ </div>
 </header>
 
 <div class="chips" id="chips"></div>
 
 <main>
+  <section class="overview" aria-label="ملخص الرصد">
+    <div class="metric good"><div class="mv" id="m-news">—</div><div class="ml">أخبار مرصودة</div></div>
+    <div class="metric info"><div class="mv" id="m-src">—</div><div class="ml">مصادر نشطة</div></div>
+    <div class="metric"><div class="mv" id="m-fresh">—</div><div class="ml">أخبار اليوم</div></div>
+    <div class="metric warn"><div class="mv" id="m-saved">—</div><div class="ml">أخبار محفوظة</div></div>
+  </section>
+  <div class="trustbar">
+    <div class="shield" aria-hidden="true">✓</div>
+    <div><b>فتح آمن للروابط</b><br><span id="linkSummary">يتم التحقق من صيغة كل رابط قبل فتحه</span></div>
+    <button onclick="openSheet('settings');stTab('src')">حالة المصادر</button>
+  </div>
   <div class="windowbar">
     <div class="seg" id="winSeg">
       <button data-w="1" onclick="setWindow(1)">اليوم</button>
       <button data-w="3" onclick="setWindow(3)">٣ أيام</button>
       <button data-w="7" class="on" onclick="setWindow(7)">أسبوع</button>
     </div>
-    <button class="refresh" id="refreshBtn" onclick="loadFeed()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-      تحديث
-    </button>
+    <div class="viewtools">
+      <select class="sortsel" id="sortSel" onchange="setSort(this.value)" aria-label="ترتيب الأخبار">
+        <option value="new">الأحدث أولًا</option>
+        <option value="old">الأقدم أولًا</option>
+        <option value="source">حسب المصدر</option>
+      </select>
+      <button class="refresh" id="refreshBtn" onclick="loadFeed()" aria-label="تحديث الأخبار">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        تحديث
+      </button>
+    </div>
   </div>
   <div class="stats" id="stats">جارٍ التحميل…</div>
   <div id="feed"></div>
@@ -330,8 +407,7 @@ nav button.on{color:var(--acc)}
 <!-- Add sheet -->
 <div class="sheet" id="sheet-add">
   <div class="sheet-inner">
-    <h2>إضافة خبر يدوي</h2>
-    <div class="hint">سجّل خبر أو رابط من فيسبوك / إكس / موقع رسمي</div>
+    <div class="sheet-head"><div><h2>إضافة خبر يدوي</h2><div class="hint">سجّل خبرًا أو رابطًا من فيسبوك / إكس / موقع رسمي</div></div><button class="xclose" onclick="closeSheet()" aria-label="إغلاق">×</button></div>
     <div class="field"><label>العنوان</label><input id="m-title" placeholder="مثال: بدء أعمال تطهير ترعة…"></div>
     <div class="field"><label>التفاصيل</label><textarea id="m-body" placeholder="ملخص الخبر…"></textarea></div>
     <div class="field"><label>المصدر</label>
@@ -352,7 +428,7 @@ nav button.on{color:var(--acc)}
 <!-- Settings sheet -->
 <div class="sheet" id="sheet-settings">
   <div class="sheet-inner">
-    <h2>الإعدادات</h2>
+    <div class="sheet-head"><div><h2>الإعدادات ومركز الاتصال</h2><div class="hint">إدارة الكلمات والمصادر والتحقق من جاهزية الروابط</div></div><button class="xclose" onclick="closeSheet()" aria-label="إغلاق">×</button></div>
     <div class="tabbtns">
       <button class="on" data-st="kw" onclick="stTab('kw')">الكلمات المفتاحية</button>
       <button data-st="src" onclick="stTab('src')">المصادر</button>
@@ -370,7 +446,12 @@ nav button.on{color:var(--acc)}
     </div>
 
     <div id="st-src" style="display:none">
-      <div class="note">⭐ <b>الحل النهائي (موصى به):</b> اعمل Cloudflare Worker مجاني والصق رابطه هنا. الـ Worker بيجيب كل الأخبار ويفلتر أخبار الري لوحده ويرجّعها جاهزة — بدون أي مشاكل.</div>
+      <div class="srchealth">
+        <div class="healthbox"><b id="h-ok">0</b><span>مصدر يعمل</span></div>
+        <div class="healthbox"><b id="h-bad">0</b><span>يحتاج مراجعة</span></div>
+        <div class="healthbox"><b id="h-links">0</b><span>رابط صالح</span></div>
+      </div>
+      <div class="note">يختبر التطبيق كل مصدر أثناء التحديث، ويتجاوز المصدر المتعطل تلقائيًا. رابط الـ Worker اختياري ويُستخدم لتفادي قيود المتصفح عند قراءة RSS.</div>
       <div class="field"><label>رابط الـ Worker الخاص بك (بروكسي ثابت)</label>
         <input id="proxy-url" type="url" placeholder="https://xxx.workers.dev" dir="ltr">
       </div>
@@ -390,6 +471,19 @@ nav button.on{color:var(--acc)}
 
 <div class="toast" id="toast"></div>
 
+<div class="link-dialog" id="linkDialog" role="dialog" aria-modal="true" aria-labelledby="linkTitle">
+  <div class="link-card">
+    <h3 id="linkTitle">فتح المصدر الأصلي</h3>
+    <p id="linkText">سيتم فتح الرابط في تبويب جديد مع حماية الصفحة الحالية.</p>
+    <div class="link-host" id="linkHost"></div>
+    <div class="link-actions">
+      <button onclick="closeLinkDialog()">إلغاء</button>
+      <button onclick="copyPendingLink()">نسخ الرابط</button>
+      <button class="go" onclick="confirmOpenLink()">فتح الآن</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============ STATE ============ */
 const LS = {
@@ -400,18 +494,18 @@ const DEFAULT_KW = ['ترعة','ترع','مصرف','مصارف','الري','وز
   'تطهير','حصة مائية','تعدٍ على','شبكة الري','مياه الشرب','السد العالي','مفيض','حياة كريمة',
   'تبطين','منشآت مائية','الإسماعيلية','المنصورية','قناطر'];
 
-/* مصادر متنوعة: RSS مباشر + 5 موجزات جوجل أخبار (كل موجز بيجمع من عشرات الجرائد، آخر 7 أيام فقط when:7d) */
+/* موجزات بحث مركزة تجمع الأخبار من عشرات الجهات وتعيد رابط الخبر الأصلي */
 function gnURL(q){return 'https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:7d')+'&hl=ar&gl=EG&ceid=EG:ar'}
 const DEFAULT_SRC = [
-  {nm:'اليوم السابع', url:'https://www.youm7.com/rss/SectionRss?SectionID=88', ty:'news'},
-  {nm:'بوابة الأهرام', url:'https://gate.ahram.org.eg/rss/4.aspx', ty:'news'},
-  {nm:'الوطن', url:'https://www.elwatannews.com/feeds', ty:'news'},
-  {nm:'صدى البلد', url:'https://www.elbalad.news/rss/all', ty:'news'},
   {nm:'🛰️ وزارة الري', url:gnURL('"وزارة الموارد المائية والري" OR "وزير الري"'), ty:'agg'},
   {nm:'🛰️ الترع والتطهير', url:gnURL('ترعة OR تطهير الترع OR تبطين الترع مصر'), ty:'agg'},
   {nm:'🛰️ المصارف والصرف', url:gnURL('مصرف زراعي OR "شبكة الصرف" OR صرف زراعي مصر'), ty:'agg'},
   {nm:'🛰️ النيل والسدود', url:gnURL('"السد العالي" OR "سد النهضة" OR "إيراد النيل" OR "فيضان النيل"'), ty:'agg'},
   {nm:'🛰️ مياه الشرب والتعديات', url:gnURL('"مياه الشرب" OR "تعديات على النيل" OR "تعديات على الترع" مصر'), ty:'agg'},
+  {nm:'🛰️ مشروعات الري', url:gnURL('"مشروعات الري" OR "تأهيل الترع" OR "المنشآت المائية" مصر'), ty:'agg'},
+  {nm:'🛰️ الري الحديث والزراعة', url:gnURL('"الري الحديث" OR "الري الذكي" OR "الاحتياجات المائية" مصر'), ty:'agg'},
+  {nm:'🛰️ أخبار ري الجيزة', url:gnURL('الري الجيزة OR ترع الجيزة OR مصارف الجيزة'), ty:'agg'},
+  {nm:'🛰️ المياه والمناخ', url:gnURL('"الموارد المائية" المناخ OR الجفاف OR ندرة المياه مصر'), ty:'agg'},
 ];
 let KW = load(LS.kw, DEFAULT_KW);
 let SRC = load(LS.src, DEFAULT_SRC);
@@ -421,17 +515,31 @@ let WIN_DAYS = +(localStorage.getItem(LS.win)||7);
 let activeChip = 'all';
 let currentTab = 'feed';
 let allItems = [];
+let rawItems = [];
+let SORT_MODE = localStorage.getItem('irn_sort') || 'new';
 let SRC_STATUS = {};   // صحة كل مصدر: {ok, count}
 let LAST_UPD = +(localStorage.getItem(LS.last)||0);
 let _loading=false;
 
+/* قبول روابط الويب الآمنة فقط ومنع javascript: والروابط المشوهة */
+function safeURL(value){
+  try{
+    const u=new URL((value||'').trim(),location.href);
+    if(!/^https?:$/.test(u.protocol)) return '';
+    return u.href;
+  }catch{return ''}
+}
+function sourceHome(value){
+  try{const u=new URL(value);return /^https?:$/.test(u.protocol)?u.origin:''}catch{return ''}
+}
+
 /* ترقية المصادر: لو نسخة المصادر قديمة، ندمج الافتراضيات الجديدة ونحافظ على إضافات المستخدم */
 (function migrateSrc(){
-  if(localStorage.getItem(LS.srcv)==='2') return;
+  if(localStorage.getItem(LS.srcv)==='3') return;
   const oldDefaults=['youm7.com','ahram.org.eg','elwatannews.com','elbalad.news','news.google.com'];
   const userAdded = (load(LS.src,[])||[]).filter(s=>!oldDefaults.some(d=>(s.url||'').includes(d)));
   SRC = DEFAULT_SRC.concat(userAdded);
-  save(LS.src,SRC); localStorage.setItem(LS.srcv,'2');
+  save(LS.src,SRC); localStorage.setItem(LS.srcv,'3');
 })();
 
 function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}catch{return d}}
@@ -454,15 +562,27 @@ function buildProxies(){
 }
 let PROXIES = buildProxies();
 
+async function fetchText(url,timeout=12000){
+  const ctrl=new AbortController();
+  const tm=setTimeout(()=>ctrl.abort(),timeout);
+  try{
+    const r=await fetch(url,{cache:'no-store',signal:ctrl.signal,headers:{Accept:'application/rss+xml, application/xml, text/xml, text/plain, */*'}});
+    if(!r.ok) return '';
+    return await r.text();
+  }finally{clearTimeout(tm)}
+}
+async function fetchJSON(url,timeout=9000){
+  const ctrl=new AbortController();const tm=setTimeout(()=>ctrl.abort(),timeout);
+  try{const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});if(!r.ok)return null;return await r.json()}catch{return null}finally{clearTimeout(tm)}
+}
 async function fetchRSS(url){
-  for(const p of PROXIES){
+  const valid=safeURL(url); if(!valid) return null;
+  /* نجرب المصدر مباشرة أولًا، ثم مسارات العبور عند منع CORS */
+  const attempts=[u=>u,...PROXIES];
+  for(const p of attempts){
     try{
-      const ctrl=new AbortController();
-      const tm=setTimeout(()=>ctrl.abort(),12000);
-      const r = await fetch(p(url),{cache:'no-store',signal:ctrl.signal});
-      clearTimeout(tm);
-      if(!r.ok) continue;
-      const txt = await r.text();
+      const txt = await fetchText(p(valid));
+      if(!txt) continue;
       const items = parseRSS(txt);
       if(items.length) return items;
     }catch(e){/* try next proxy */}
@@ -494,8 +614,8 @@ function parseRSS(txt){
 }
 
 /* ============ دقة الزمن: فلتر النافذة الإجباري ============ */
-function freshOnly(items){
-  const now=Date.now(), max=WIN_DAYS*86400000;
+function freshOnly(items,days=WIN_DAYS){
+  const now=Date.now(), max=days*86400000;
   return items.filter(it=>{
     if(it.manual) return (now-(it.t||0))<=7*86400000;     // اليدوي: أسبوع كحد أقصى
     if(!it.t || isNaN(it.t)) return false;                 // بدون تاريخ صالح → مرفوض
@@ -529,8 +649,14 @@ function matchedTags(item){
 async function loadFeed(silent){
   if(_loading) return; _loading=true;
   const btn=document.getElementById('refreshBtn');btn.classList.add('spin');
+  btn.disabled=true;document.querySelector('main').setAttribute('aria-busy','true');
   document.getElementById('waterline').classList.add('on');
   const feed=document.getElementById('feed');
+  if(!navigator.onLine){
+    rawItems=freshOnly(load(LS.cache,[]),7);allItems=freshOnly(rawItems,WIN_DAYS);
+    btn.classList.remove('spin');btn.disabled=false;document.querySelector('main').removeAttribute('aria-busy');
+    document.getElementById('waterline').classList.remove('on');_loading=false;renderFeed();renderStats();toast('لا يوجد اتصال — تم عرض النسخة المحفوظة');return;
+  }
   if(!silent){
     feed.innerHTML = Array(5).fill('<div class="skel"><div class="ln w40"></div><div class="ln w90"></div><div class="ln w70"></div><div class="ln w55"></div></div>').join('');
     document.getElementById('stats').textContent='جارٍ جلب الأخبار من '+SRC.length+' مصادر…';
@@ -544,9 +670,8 @@ async function loadFeed(silent){
   // (1) لو فيه Worker: نجيب JSON جاهز مرة واحدة
   if(USER_PROXY){
     try{
-      const r=await fetch(USER_PROXY.replace(/\/+$/,'')+'/?_t='+Date.now(),{cache:'no-store'});
-      if(r.ok){
-        const data=await r.json();
+      const data=await fetchJSON(USER_PROXY.replace(/\/+$/,'')+'/?_t='+Date.now());
+      if(data){
         if(data&&Array.isArray(data.items)&&data.items.length){
           // تطبيع: نضمن وجود timestamp صالح قبل الفلتر الزمني
           const norm=data.items.map(it=>({...it,
@@ -573,22 +698,24 @@ async function loadFeed(silent){
     }));
     const settled = await Promise.allSettled(tasks);
     settled.forEach(r=>{if(r.status==='fulfilled') results=results.concat(r.value)});
-    results = results.filter(matchKW);
   }
 
   // ✅ الدقة: فلتر النافذة الزمنية + إزالة التكرار (تنطبق حتى على نتائج الـ Worker)
-  results = freshOnly(results);
+  results = results.filter(matchKW);
+  results = freshOnly(results,7);
   results = dedupe(results);
 
   // الأخبار اليدوية دايمًا فوق
-  const manualItems = freshOnly(MANUAL.map(m=>({...m,srcType:m.src,srcName:srcLabel(m.src),manual:true})));
+  const manualItems = freshOnly(MANUAL.map(m=>({...m,srcType:m.src,srcName:srcLabel(m.src),manual:true})),7);
   results = manualItems.concat(results);
   results.sort((a,b)=>(b.t||0)-(a.t||0));
 
-  allItems = results;
+  rawItems = results;
+  allItems = freshOnly(rawItems,WIN_DAYS);
   save(LS.cache, results.slice(0,80));
   LAST_UPD=Date.now();localStorage.setItem(LS.last,LAST_UPD);
   btn.classList.remove('spin');
+  btn.disabled=false;document.querySelector('main').removeAttribute('aria-busy');
   document.getElementById('waterline').classList.remove('on');
   _loading=false;
   renderFeed();renderStats();
@@ -615,8 +742,12 @@ function setWindow(d){
   WIN_DAYS=d;localStorage.setItem(LS.win,d);
   document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===d));
   // إعادة فلترة فورية بدون جلب جديد
-  allItems=freshOnly(allItems);renderFeed();renderStats();
+  allItems=freshOnly(rawItems,WIN_DAYS);renderFeed();renderStats();
   toast('عرض أخبار آخر '+winLabel());
+}
+function setSort(mode){
+  SORT_MODE=['new','old','source'].includes(mode)?mode:'new';
+  localStorage.setItem('irn_sort',SORT_MODE);renderFeed();
 }
 
 function srcLabel(t){return {news:'موقع إخباري',fb:'فيسبوك',x:'إكس',gov:'جهة رسمية',agg:'متعدد المصادر',manual:'إدخال يدوي'}[t]||'مصدر'}
@@ -652,6 +783,20 @@ function renderStats(){
     :`<span class="${ok? 'srcok':'srcbad'}">المصادر ${ok}/${names.length}</span>`);
   if(LAST_UPD) parts.push(`آخر تحديث ${timeAgo(LAST_UPD)}`);
   st.innerHTML=parts.join('<span class="sep"> · </span>');
+  updateOverview();
+}
+function updateOverview(){
+  const names=Object.keys(SRC_STATUS).filter(k=>k!=='__worker');
+  const ok=SRC_STATUS.__worker?1:names.filter(n=>SRC_STATUS[n].ok).length;
+  const today=allItems.filter(i=>i.t&&Date.now()-i.t<86400000).length;
+  document.getElementById('m-news').textContent=allItems.length.toLocaleString('ar-EG');
+  document.getElementById('m-src').textContent=ok?ok.toLocaleString('ar-EG'):'—';
+  document.getElementById('m-fresh').textContent=today.toLocaleString('ar-EG');
+  document.getElementById('m-saved').textContent=SAVED.length.toLocaleString('ar-EG');
+  document.getElementById('h-ok').textContent=ok.toLocaleString('ar-EG');
+  document.getElementById('h-bad').textContent=Math.max(0,names.length-names.filter(n=>SRC_STATUS[n].ok).length).toLocaleString('ar-EG');
+  document.getElementById('h-links').textContent=SRC.filter(s=>safeURL(s.url)).length.toLocaleString('ar-EG');
+  document.getElementById('linkSummary').textContent=navigator.onLine?'الاتصال متاح · تُرفض الروابط غير الآمنة تلقائيًا':'وضع دون اتصال · الأخبار المحفوظة متاحة';
 }
 
 /* ============ Render (مجمّع باليوم + Hero) ============ */
@@ -668,19 +813,20 @@ function cardHTML(it,i,tab,isHero){
   const tags=matchedTags(it);
   const isSaved=SAVED.some(s=>normTitle(s.title)===normTitle(it.title));
   const isNew=it.t && (Date.now()-it.t)<6*3600000;
-  return `<article class="card s-${srcClass(it.srcType)} ${isHero?'hero':''}" style="animation-delay:${Math.min(i,12)*.03}s">
+  return `<article class="card s-${esc(it.srcType||'news')} ${isHero?'hero':''}" style="animation-delay:${Math.min(i,12)*.03}s">
     ${isHero?'<div class="heroLbl">⚡ أحدث خبر</div>':''}
     <div class="meta">
       <span class="src ${srcClass(it.srcType)}">${esc(it.srcName||srcLabel(it.srcType))}</span>
       ${it.via?`<span class="via">عبر ${esc(it.via)}</span>`:''}
       <span class="time"><span class="fdot ${fdotClass(it.t)}"></span>${timeAgo(it.t)}</span>
       ${isNew?'<span class="newbadge">جديد</span>':''}
+      ${it.link&&safeURL(it.link)?'<span class="linkmark">رابط صالح</span>':''}
     </div>
     <h3>${esc(it.title)}</h3>
     ${it.desc?`<p>${esc(it.desc)}</p>`:''}
     ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
     <div class="acts">
-      ${it.link?`<a href="${it.link}" target="_blank" rel="noopener">فتح المصدر</a>`:''}
+      ${it.link&&safeURL(it.link)?`<button class="primary" onclick='requestOpenLink(${i},"${tab}")'>فتح المصدر ↗</button>`:''}
       <button onclick='toggleSave(${i},"${tab}")'>${isSaved?'★ محفوظ':'☆ حفظ'}</button>
       <button onclick='shareItem(${i},"${tab}")'>مشاركة</button>
     </div>
@@ -688,7 +834,7 @@ function cardHTML(it,i,tab,isHero){
 }
 function renderFeed(){
   const feed=document.getElementById('feed');
-  let items = currentTab==='saved' ? SAVED : allItems;
+  let items = [...(currentTab==='saved' ? SAVED : allItems)];
   if(activeChip!=='all' && currentTab==='feed'){
     items = items.filter(i=>{
       if(activeChip==='_src_news') return i.srcType==='news'||!i.srcType;
@@ -701,6 +847,10 @@ function renderFeed(){
   if(currentTab==='saved'){
     document.getElementById('stats').innerHTML=`<b>${items.length}</b> خبر محفوظ`;
   }
+
+  if(SORT_MODE==='old') items.sort((a,b)=>(a.t||0)-(b.t||0));
+  else if(SORT_MODE==='source') items.sort((a,b)=>(a.srcName||'').localeCompare(b.srcName||'','ar'));
+  else items.sort((a,b)=>(b.t||0)-(a.t||0));
 
   if(!items.length){
     if(currentTab==='saved'){
@@ -718,12 +868,12 @@ function renderFeed(){
   let html='', lastDay='';
   items.forEach((it,vi)=>{
     const dk=dayKey(it.t||Date.now());
-    if(currentTab==='feed' && dk!==lastDay){
+    if(currentTab==='feed' && SORT_MODE!=='source' && dk!==lastDay){
       lastDay=dk;
       const cnt=items.filter(x=>dayKey(x.t||Date.now())===dk).length;
       html+=`<div class="dayhdr">${dayTitle(it.t||Date.now())}<span class="dc">${cnt}</span></div>`;
     }
-    html+=cardHTML(it, idxOf(it), currentTab, currentTab==='feed'&&vi===0&&activeChip==='all');
+    html+=cardHTML(it, idxOf(it), currentTab, currentTab==='feed'&&vi===0&&activeChip==='all'&&SORT_MODE==='new');
   });
   feed.innerHTML=html;
 }
@@ -736,16 +886,21 @@ function toggleSave(i,tab){
   const idx=SAVED.findIndex(s=>normTitle(s.title)===normTitle(it.title));
   if(idx>=0){SAVED.splice(idx,1);toast('أُزيل من المحفوظ')}
   else{SAVED.unshift(it);toast('تم الحفظ ★')}
-  save(LS.saved,SAVED);renderFeed();
+  save(LS.saved,SAVED);renderFeed();updateOverview();
 }
 function shareItem(i,tab){
   const list=tab==='saved'?SAVED:allItems;const it=list[i];if(!it)return;
   const text=`${it.title}\n${it.desc||''}\n${it.link||''}`;
   if(navigator.share){navigator.share({title:it.title,text:it.desc||'',url:it.link||location.href}).catch(()=>{})}
-  else{navigator.clipboard.writeText(text);toast('تم نسخ الخبر')}
+  else{copyText(text).then(()=>toast('تم نسخ الخبر')).catch(()=>toast('تعذر النسخ على هذا المتصفح'))}
+}
+function copyText(text){
+  if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);
+  return new Promise((resolve,reject)=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')?resolve():reject()}catch(e){reject(e)}finally{ta.remove()}})
 }
 function doSearch(){
   const q=document.getElementById('q').value.trim().toLowerCase();
+  document.getElementById('clearSearch').classList.toggle('show',!!q);
   if(!q){activeChip='all';renderFeed();renderStats();return}
   const feed=document.getElementById('feed');
   const items=allItems.filter(i=>(i.title+' '+(i.desc||'')).toLowerCase().includes(q));
@@ -756,6 +911,7 @@ function doSearch(){
 let _qT;
 document.getElementById('q').addEventListener('input',()=>{clearTimeout(_qT);_qT=setTimeout(doSearch,350)});
 document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
+function clearSearch(){document.getElementById('q').value='';document.getElementById('clearSearch').classList.remove('show');activeChip='all';renderChips();renderFeed();renderStats();document.getElementById('q').focus()}
 
 /* ============ Chips ============ */
 function renderChips(){
@@ -781,6 +937,7 @@ function openSheet(which){
 }
 function closeSheet(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'))}
 document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheet()}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeLinkDialog()}});
 
 function stTab(t){
   document.querySelectorAll('.tabbtns button').forEach(b=>b.classList.toggle('on',b.dataset.st===t));
@@ -792,8 +949,10 @@ function stTab(t){
 function addManual(){
   const title=document.getElementById('m-title').value.trim();
   if(!title){toast('اكتب عنوان الخبر');return}
+  const rawLink=document.getElementById('m-url').value.trim();
+  if(rawLink&&!safeURL(rawLink)){toast('الرابط غير صالح — استخدم https://');return}
   const item={title,desc:document.getElementById('m-body').value.trim(),
-    src:document.getElementById('m-src').value,link:document.getElementById('m-url').value.trim(),
+    src:document.getElementById('m-src').value,link:rawLink?safeURL(rawLink):'',
     t:Date.now()};
   MANUAL.unshift(item);save(LS.manual,MANUAL);
   document.getElementById('m-title').value='';document.getElementById('m-body').value='';document.getElementById('m-url').value='';
@@ -820,25 +979,64 @@ function renderSrc(){
     const st=SRC_STATUS[s.nm];
     const cls=st? (st.ok?'ok':'bad') : '';
     const cnt=st&&st.ok? `${st.count} خبر` : (st? 'فشل ✗':'');
-    return `<div class="srcrow"><span class="st ${cls}"></span><div class="nm">${esc(s.nm)}<div class="ty">${srcLabel(s.ty)}</div></div><span class="cnt">${cnt}</span><div class="del" onclick="delSrc(${i})">×</div></div>`;
+    const home=sourceHome(s.url);
+    return `<div class="srcrow"><span class="st ${cls}"></span><div class="nm">${esc(s.nm)}<div class="ty">${srcLabel(s.ty)} ${safeURL(s.url)?'· رابط صالح':'· رابط غير صالح'}</div></div><span class="cnt">${cnt}</span>${home?`<button class="probe" onclick="requestOpenURL('${esc(home)}','موقع المصدر')">فتح</button>`:''}<button class="probe" onclick="probeSource(${i},this)">اختبار</button><button class="del" onclick="delSrc(${i})" aria-label="حذف المصدر">×</button></div>`;
   }).join('');
+  updateOverview();
 }
 function addSrc(){
   const nm=document.getElementById('src-nm').value.trim();
   const url=document.getElementById('src-url').value.trim();
   if(!nm||!url){toast('اكتب الاسم والرابط');return}
-  SRC.push({nm,url,ty:'news'});save(LS.src,SRC);
+  const valid=safeURL(url);if(!valid){toast('رابط RSS غير صالح — استخدم https://');return}
+  SRC.push({nm,url:valid,ty:'news'});save(LS.src,SRC);
   document.getElementById('src-nm').value='';document.getElementById('src-url').value='';
   renderSrc();toast('تم إضافة المصدر');
 }
 function delSrc(i){SRC.splice(i,1);save(LS.src,SRC);renderSrc()}
 function resetSrc(){SRC=JSON.parse(JSON.stringify(DEFAULT_SRC));save(LS.src,SRC);renderSrc();toast('تم استعادة المصادر');loadFeed()}
 function saveProxy(){
-  USER_PROXY=document.getElementById('proxy-url').value.trim();
+  const raw=document.getElementById('proxy-url').value.trim();
+  if(raw&&!safeURL(raw)){toast('رابط البروكسي غير صالح');return}
+  USER_PROXY=raw?safeURL(raw):'';
   localStorage.setItem('irn_proxy',USER_PROXY);
   PROXIES=buildProxies();
   toast(USER_PROXY?'تم حفظ البروكسي ⭐':'تم المسح');loadFeed();
 }
+async function probeSource(i,btn){
+  const s=SRC[i];if(!s)return;
+  const old=btn.textContent;btn.textContent='جارٍ…';btn.disabled=true;
+  const items=await fetchRSS(s.url);
+  SRC_STATUS[s.nm]={ok:Array.isArray(items)&&items.length>0,count:Array.isArray(items)?items.length:0};
+  btn.textContent=old;btn.disabled=false;renderSrc();
+  toast(SRC_STATUS[s.nm].ok?`المصدر يعمل وجلب ${items.length} خبرًا`:'تعذر الوصول للمصدر الآن');
+}
+
+/* ============ فتح الروابط بصورة آمنة وواضحة ============ */
+let PENDING_LINK='';
+function requestOpenLink(i,tab){
+  const list=tab==='saved'?SAVED:allItems;const it=list[i];if(!it)return;
+  requestOpenURL(it.link,it.srcName||'المصدر الأصلي');
+}
+function requestOpenURL(value,label){
+  const url=safeURL(value);
+  if(!url){toast('تم منع رابط غير صالح');return}
+  PENDING_LINK=url;
+  let host='';try{host=new URL(url).hostname.replace(/^www\./,'')}catch{}
+  document.getElementById('linkTitle').textContent='فتح '+(label||'المصدر');
+  document.getElementById('linkText').textContent='الرابط صالح وسيُفتح في تبويب جديد دون منح الصفحة الخارجية صلاحية التحكم في التطبيق.';
+  document.getElementById('linkHost').textContent=host+'  ·  '+url;
+  document.getElementById('linkDialog').classList.add('open');
+}
+function closeLinkDialog(){document.getElementById('linkDialog').classList.remove('open');PENDING_LINK=''}
+function confirmOpenLink(){
+  const url=safeURL(PENDING_LINK);if(!url){closeLinkDialog();toast('الرابط غير صالح');return}
+  const w=window.open(url,'_blank','noopener,noreferrer');
+  if(w)w.opener=null;else{copyText(url).then(()=>toast('منع المتصفح النافذة؛ تم نسخ الرابط'))}
+  closeLinkDialog();
+}
+function copyPendingLink(){if(!PENDING_LINK)return;copyText(PENDING_LINK).then(()=>toast('تم نسخ الرابط')).catch(()=>toast('تعذر النسخ'))}
+document.getElementById('linkDialog').addEventListener('click',e=>{if(e.target.id==='linkDialog')closeLinkDialog()});
 
 /* ============ Toast ============ */
 let toastT;
@@ -893,15 +1091,22 @@ document.addEventListener('visibilitychange',()=>{
 /* ============ Init ============ */
 function init(){
   document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===WIN_DAYS));
+  document.getElementById('sortSel').value=SORT_MODE;
   renderChips();
-  const cached=freshOnly(load(LS.cache,[]));
-  if(cached.length){allItems=cached;renderFeed();renderStats()}
+  const cached=freshOnly(load(LS.cache,[]),7);
+  if(cached.length){rawItems=cached;allItems=freshOnly(rawItems,WIN_DAYS);renderFeed();renderStats()}
+  updateNetworkState();updateOverview();
   loadFeed(cached.length>0);
 }
 init();
 
-/* ============ SW ============ */
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+/* ============ حالة الاتصال ============ */
+function updateNetworkState(){
+  document.getElementById('netbar').classList.toggle('show',!navigator.onLine);
+  updateOverview();
+}
+window.addEventListener('online',()=>{updateNetworkState();toast('عاد الاتصال بالإنترنت');loadFeed(true)});
+window.addEventListener('offline',()=>{updateNetworkState();toast('انقطع الاتصال — ستظل النسخة المحفوظة متاحة')});
 </script>
 </body>
 </html>
