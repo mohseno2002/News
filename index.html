@@ -306,6 +306,14 @@ nav button.on{color:var(--acc)}
 .fb-frame-loading{position:absolute;inset:0;display:grid;place-items:center;color:#5b6573;background:#fff;font:700 13px 'Cairo';text-align:center;padding:20px}.fb-frame-loading span::before{content:'';display:block;width:32px;height:32px;margin:0 auto 12px;border:3px solid #dbe6f2;border-top-color:#1877f2;border-radius:50%;animation:rot .8s linear infinite}
 .fb-note{margin-top:12px;padding:11px 13px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);color:var(--mut);font-size:11.5px;line-height:1.7}.fb-note b{color:var(--txt)}
 .fb-offline{text-align:center;padding:38px 20px;color:var(--mut)}.fb-offline strong{display:block;color:var(--txt);font:900 17px 'Cairo';margin-bottom:7px}.fb-offline button{margin-top:15px;border:none;background:#1877f2;color:#fff;font:800 13px inherit;padding:11px 16px;border-radius:10px;cursor:pointer}
+.social-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:4px}
+.social-tabs button{border:0;background:transparent;color:var(--mut);font:800 12.5px 'Cairo';padding:9px 5px;border-radius:9px;cursor:pointer}.social-tabs button.on{background:#1877f2;color:#fff;box-shadow:0 4px 12px rgba(24,119,242,.25)}
+.social-head{display:flex;align-items:flex-start;gap:12px;margin:4px 2px 13px}.social-head>div{flex:1}.social-head h3{font:900 17px 'Cairo';margin-bottom:3px}.social-head p{color:var(--mut);font-size:12.5px}.social-count{background:rgba(24,119,242,.12);color:#62a5ff;border:1px solid rgba(24,119,242,.3);font:900 12px 'Cairo';padding:6px 10px;border-radius:10px;white-space:nowrap}
+.watch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.watch-card{position:relative;overflow:hidden;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px;min-height:142px;display:flex;flex-direction:column}.watch-card::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:#1877f2}.watch-card.complaint::before{background:var(--warn)}
+.watch-icon{font-size:23px;line-height:1;margin-bottom:9px}.watch-card h4{font:800 14px 'Cairo';margin-bottom:4px}.watch-card p{font-size:11.5px;color:var(--mut);line-height:1.65;margin-bottom:12px}.watch-card button{margin-top:auto;border:1px solid rgba(24,119,242,.35);background:rgba(24,119,242,.1);color:#68aaff;font:800 12px inherit;padding:8px 10px;border-radius:9px;cursor:pointer}.watch-card.complaint button{border-color:rgba(245,166,35,.35);background:rgba(245,166,35,.1);color:var(--warn)}
+.social-search{display:flex;gap:8px;margin:14px 0 0}.social-search input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font:600 13px inherit;outline:0}.social-search input:focus{border-color:#1877f2}.social-search button{border:0;background:#1877f2;color:#fff;font:800 12.5px inherit;padding:0 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.complaint-cta{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px;border-radius:13px;background:linear-gradient(135deg,rgba(245,166,35,.13),rgba(239,83,80,.08));border:1px solid rgba(245,166,35,.3)}.complaint-cta>div{flex:1}.complaint-cta h4{font:900 14px 'Cairo';margin-bottom:2px}.complaint-cta p{font-size:11.5px;color:var(--mut)}.complaint-cta button{border:0;background:var(--warn);color:#241500;font:900 12px inherit;padding:10px 13px;border-radius:9px;cursor:pointer;white-space:nowrap}
 @media (min-width:820px){
   #feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
   #feed .dayhdr,#feed .empty{grid-column:1/-1}
@@ -319,6 +327,7 @@ nav button.on{color:var(--acc)}
   .trustbar{align-items:flex-start}.trustbar button{padding:6px 8px}
   .card .acts{display:grid;grid-template-columns:1.3fr 1fr 1fr}.card .acts a,.card .acts button{padding:10px 5px}
   .fb-hero{padding:18px 15px}.fb-hero h2{font-size:17px}.fb-content{padding:10px}.fb-frame-shell,.fb-frame-shell iframe{min-height:650px;height:650px}
+  .watch-grid{grid-template-columns:1fr}.social-tabs button{font-size:11.5px}.social-head{align-items:center}.social-search{flex-direction:column}.social-search button{padding:10px}.complaint-cta{align-items:flex-start;flex-wrap:wrap}.complaint-cta button{width:100%}
 }
 </style>
 </head>
@@ -408,7 +417,7 @@ nav button.on{color:var(--acc)}
   </button>
   <button data-tab="facebook" onclick="switchTab('facebook')">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.6 22v-9h3l.5-3.5h-3.5V7.3c0-1 .3-1.7 1.8-1.7h1.9V2.5c-.3 0-1.5-.1-2.8-.1-2.8 0-4.7 1.7-4.7 4.8v2.3H6.7V13h3.1v9h3.8z"/></svg>
-    فيسبوك الوزارة
+    رصد فيسبوك
   </button>
   <button data-tab="saved" onclick="switchTab('saved')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -508,7 +517,7 @@ nav button.on{color:var(--acc)}
 /* ============ STATE ============ */
 const LS = {
   kw:'irn_keywords', src:'irn_sources', saved:'irn_saved', manual:'irn_manual',
-  cache:'irn_cache', win:'irn_window', srcv:'irn_srcv', last:'irn_lastupd'
+  cache:'irn_cache', win:'irn_window', srcv:'irn_srcv', kwv:'irn_kwv', last:'irn_lastupd'
 };
 const OFFICIAL_FB = Object.freeze({
   name:'وزارة الموارد المائية والري',
@@ -516,7 +525,26 @@ const OFFICIAL_FB = Object.freeze({
 });
 const DEFAULT_KW = ['ترعة','ترع','مصرف','مصارف','الري','وزارة الموارد المائية','نهر النيل',
   'تطهير','حصة مائية','تعدٍ على','شبكة الري','مياه الشرب','السد العالي','مفيض','حياة كريمة',
-  'تبطين','منشآت مائية','الإسماعيلية','المنصورية','قناطر'];
+  'تبطين','منشآت مائية','الإسماعيلية','المنصورية','قناطر','نقص مياه الري','عدم وصول المياه',
+  'نهاية الترعة','مناوبة الري','شكوى مزارعين','غرق الأراضي'];
+const FB_WATCH = Object.freeze({
+  news:[
+    {icon:'🏛️',title:'أخبار وزارة الري',q:'وزارة الموارد المائية والري مصر',desc:'البيانات والقرارات والزيارات والمشروعات الرسمية.'},
+    {icon:'🌊',title:'أخبار مصلحة الري',q:'مصلحة الري مصر الترع',desc:'أعمال الإدارات والمنشآت والتصرفات والمناوبات.'},
+    {icon:'🚜',title:'تطهير وصيانة الترع',q:'تطهير الترع صيانة الترع مصر',desc:'حملات التطهير وإزالة الحشائش ورفع المخلفات.'},
+    {icon:'🏗️',title:'مشروعات الري',q:'مشروعات الري تأهيل الترع مصر',desc:'التأهيل والإحلال والتجديد والمنشآت المائية.'},
+    {icon:'📏',title:'المناسيب والتصرفات',q:'مناسيب المياه تصرفات الري الترع مصر',desc:'التحديثات المرتبطة بالمناسيب والتصرفات المائية.'},
+    {icon:'⚖️',title:'التعديات والمخالفات',q:'إزالة تعديات على الترع والمصارف مصر',desc:'حملات الإزالة وحماية جسور ومنافع الري.'}
+  ],
+  complaints:[
+    {icon:'💧',title:'نقص مياه الري',q:'شكوى نقص مياه الري المزارعين مصر',desc:'شكاوى ضعف أو انقطاع المياه خلال موسم الزراعة.'},
+    {icon:'🏁',title:'عدم وصول المياه للنهايات',q:'عدم وصول مياه الري لنهايات الترع',desc:'رصد الاختناقات ومشكلات نهايات الترع والمساقي.'},
+    {icon:'🌿',title:'انسداد أو عدم تطهير الترع',q:'شكوى عدم تطهير الترع انسداد الترعة',desc:'الحشائش والمخلفات والإطماء التي تعوق سريان المياه.'},
+    {icon:'🕒',title:'مخالفة المناوبات',q:'شكوى مخالفة مناوبات الري',desc:'تأخر فتح المياه أو عدم الالتزام بجداول المناوبات.'},
+    {icon:'🚧',title:'التعديات وردم الترع',q:'شكوى تعديات ردم الترع مصر',desc:'ردم المجاري المائية والتعديات على الجسور والمنافع.'},
+    {icon:'🌧️',title:'غرق الأراضي والصرف',q:'شكوى غرق الأراضي الزراعية الصرف مصر',desc:'ارتفاع مناسيب المصارف أو تسرب المياه وغرق الزمام.'}
+  ]
+});
 
 /* موجزات بحث مركزة تجمع الأخبار من عشرات الجهات وتعيد رابط الخبر الأصلي */
 function gnURL(q){return 'https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:7d')+'&hl=ar&gl=EG&ceid=EG:ar'}
@@ -538,6 +566,7 @@ let MANUAL = load(LS.manual, []);
 let WIN_DAYS = +(localStorage.getItem(LS.win)||7);
 let activeChip = 'all';
 let currentTab = 'feed';
+let FB_MODE = 'official';
 let allItems = [];
 let rawItems = [];
 let SORT_MODE = localStorage.getItem('irn_sort') || 'new';
@@ -564,6 +593,14 @@ function sourceHome(value){
   const userAdded = (load(LS.src,[])||[]).filter(s=>!oldDefaults.some(d=>(s.url||'').includes(d)));
   SRC = DEFAULT_SRC.concat(userAdded);
   save(LS.src,SRC); localStorage.setItem(LS.srcv,'3');
+})();
+
+/* إضافة مفردات الرصد الاجتماعي للنسخ السابقة مع الحفاظ على تخصيصات المستخدم */
+(function migrateSocialKeywords(){
+  if(localStorage.getItem(LS.kwv)==='2') return;
+  ['نقص مياه الري','عدم وصول المياه','نهاية الترعة','مناوبة الري','شكوى مزارعين','غرق الأراضي']
+    .forEach(k=>{if(!KW.includes(k))KW.push(k)});
+  save(LS.kw,KW);localStorage.setItem(LS.kwv,'2');
 })();
 
 function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}catch{return d}}
@@ -863,25 +900,65 @@ function facebookPluginURL(){
   const p=new URLSearchParams({href:OFFICIAL_FB.page,tabs:'timeline',width:'500',height:'720',small_header:'false',adapt_container_width:'true',hide_cover:'false',show_facepile:'false'});
   return 'https://www.facebook.com/plugins/page.php?'+p.toString();
 }
-function renderFacebookHub(){
+function facebookSearchURL(query){
+  return 'https://www.facebook.com/search/posts/?q='+encodeURIComponent(query);
+}
+function socialTabsHTML(){
+  return `<div class="social-tabs" role="tablist" aria-label="أنواع الرصد على فيسبوك">
+    <button class="${FB_MODE==='official'?'on':''}" onclick="setFacebookMode('official')">🏛️ الصفحات الرسمية</button>
+    <button class="${FB_MODE==='news'?'on':''}" onclick="setFacebookMode('news')">📰 أخبار الري</button>
+    <button class="${FB_MODE==='complaints'?'on':''}" onclick="setFacebookMode('complaints')">📣 شكاوى المزارعين</button>
+  </div>`;
+}
+function watchCardsHTML(type){
+  const list=FB_WATCH[type]||[];
+  return `<div class="social-head"><div><h3>${type==='complaints'?'رصد شكاوى المزارعين':'رصد أخبار الري على فيسبوك'}</h3><p>${type==='complaints'?'افتح نتائج فيسبوك لكل نوع شكوى ثم احفظ المنشور المهم للمتابعة.':'بحث موضوعي سريع في أحدث المنشورات العامة والصفحات المرتبطة بالري.'}</p></div><span class="social-count">${list.length} مسارات رصد</span></div>
+    <div class="watch-grid">${list.map((x,i)=>`<article class="watch-card ${type==='complaints'?'complaint':''}"><div class="watch-icon">${x.icon}</div><h4>${esc(x.title)}</h4><p>${esc(x.desc)}</p><button onclick="openFacebookSearch('${type}',${i})">بحث في فيسبوك ↗</button></article>`).join('')}</div>
+    <div class="social-search"><input id="fbCustomQuery" type="search" placeholder="ابحث عن ترعة، قرية، إدارة ري أو نوع شكوى…" aria-label="بحث مخصص في فيسبوك" onkeydown="if(event.key==='Enter')runCustomFacebookSearch()"><button onclick="runCustomFacebookSearch()">بحث مخصص</button></div>
+    ${type==='complaints'?'<div class="complaint-cta"><div><h4>وجدت شكوى مهمة؟</h4><p>سجّل عنوانها ورابط المنشور داخل التطبيق لتبقى محفوظة ويمكن مشاركتها ومتابعتها.</p></div><button onclick="openFacebookCapture()">＋ تسجيل رابط شكوى</button></div>':''}
+    <div class="fb-note"><b>خصوصية فيسبوك:</b> النتائج المتاحة تتحدد وفق تسجيل الدخول وخصوصية كل منشور أو مجموعة. التطبيق لا يتجاوز إعدادات الخصوصية ولا يدّعي الوصول إلى المحتوى المغلق.</div>`;
+}
+function renderFacebookHub(mode){
+  if(['official','news','complaints'].includes(mode)) FB_MODE=mode;
   const feed=document.getElementById('feed');
-  document.getElementById('stats').innerHTML='<b>المصدر الرسمي</b><span class="sep"> · </span>تحديثات صفحة الوزارة على فيسبوك';
+  const labels={official:'الصفحات الرسمية',news:'أخبار الري',complaints:'شكاوى المزارعين'};
+  document.getElementById('stats').innerHTML=`<b>رصد فيسبوك</b><span class="sep"> · </span>${labels[FB_MODE]}`;
   if(!navigator.onLine){
-    feed.innerHTML=`<section class="fb-hub"><div class="fb-hero"><div class="fb-kicker"><i></i> الصفحة الرسمية الموثقة</div><h2>${esc(OFFICIAL_FB.name)}</h2><p>متابعة بيانات الوزارة وأخبار المشروعات والفعاليات المنشورة على الصفحة الرئيسية.</p></div><div class="fb-offline"><strong>لا يوجد اتصال بالإنترنت</strong>سيظهر الخط الزمني الرسمي فور عودة الاتصال.<br><button onclick="renderFacebookHub()">إعادة المحاولة</button></div></section>`;
+    feed.innerHTML=`<section class="fb-hub"><div class="fb-hero"><div class="fb-kicker"><i></i> مركز الرصد الاجتماعي</div><h2>أخبار الري وشكاوى المزارعين</h2><p>متابعة الصفحات الرسمية والمنشورات العامة ذات الصلة بالري.</p></div><div class="fb-content">${socialTabsHTML()}<div class="fb-offline"><strong>لا يوجد اتصال بالإنترنت</strong>تحتاج متابعة فيسبوك إلى اتصال نشط.<br><button onclick="renderFacebookHub()">إعادة المحاولة</button></div></div></section>`;
     return;
   }
-  feed.innerHTML=`<section class="fb-hub" aria-label="تحديثات فيسبوك الرسمية">
-    <div class="fb-hero"><div class="fb-kicker"><i></i> المصدر الرسمي المباشر</div><h2>${esc(OFFICIAL_FB.name)}</h2><p>الخط الزمني للصفحة الرئيسية للوزارة؛ يتجدد تلقائيًا بأحدث المنشورات التي تتيحها فيسبوك.</p><div class="fb-actions"><button class="solid" onclick="openOfficialFacebook()">فتح الصفحة الرسمية ↗</button><button onclick="refreshOfficialFacebook()">تحديث المنشورات</button></div></div>
-    <div class="fb-content"><div class="fb-status" id="fbStatus"><span class="st"></span><span>جارٍ الاتصال بفيسبوك…</span></div><div class="fb-frame-shell"><div class="fb-frame-loading" id="fbLoading"><span>جارٍ تحميل الخط الزمني الرسمي</span></div><iframe id="officialFacebookFrame" title="منشورات وزارة الموارد المائية والري على فيسبوك" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" onload="facebookFrameLoaded()"></iframe></div><div class="fb-note"><b>ملاحظة:</b> إذا طلب فيسبوك تسجيل الدخول أو منع العرض داخل التطبيق، استخدم زر «فتح الصفحة الرسمية». الرابط ثابت وتم التحقق منه.</div></div>
+  const content=FB_MODE==='official'
+    ? `<div class="fb-status" id="fbStatus"><span class="st"></span><span>جارٍ الاتصال بفيسبوك…</span></div><div class="fb-frame-shell"><div class="fb-frame-loading" id="fbLoading"><span>جارٍ تحميل الخط الزمني الرسمي</span></div><iframe id="officialFacebookFrame" title="منشورات وزارة الموارد المائية والري على فيسبوك" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" onload="facebookFrameLoaded()"></iframe></div><div class="fb-note"><b>ملاحظة:</b> إذا طلب فيسبوك تسجيل الدخول أو منع العرض داخل التطبيق، استخدم زر «فتح الصفحة الرسمية».</div>`
+    : watchCardsHTML(FB_MODE);
+  feed.innerHTML=`<section class="fb-hub" aria-label="مركز رصد فيسبوك">
+    <div class="fb-hero"><div class="fb-kicker"><i></i> مركز الرصد الاجتماعي</div><h2>أخبار الري وشكاوى المزارعين</h2><p>متابعة الخبر الرسمي، ورصد الموضوعات المتداولة، والوصول السريع إلى شكاوى المزارعين العامة.</p><div class="fb-actions"><button class="solid" onclick="openOfficialFacebook()">صفحة الوزارة الرسمية ↗</button><button onclick="refreshOfficialFacebook()">تحديث المركز</button></div></div>
+    <div class="fb-content">${socialTabsHTML()}${content}</div>
   </section>`;
-  requestAnimationFrame(()=>{const f=document.getElementById('officialFacebookFrame');if(f)f.src=facebookPluginURL()});
+  if(FB_MODE==='official') requestAnimationFrame(()=>{const f=document.getElementById('officialFacebookFrame');if(f)f.src=facebookPluginURL()});
+}
+function setFacebookMode(mode){renderFacebookHub(mode);window.scrollTo({top:document.querySelector('main').offsetTop,behavior:'smooth'})}
+function openFacebookSearch(type,index){
+  const item=(FB_WATCH[type]||[])[index];if(!item)return;
+  requestOpenURL(facebookSearchURL(item.q),'بحث فيسبوك: '+item.title);
+}
+function runCustomFacebookSearch(){
+  const input=document.getElementById('fbCustomQuery');const q=input?input.value.trim():'';
+  if(!q){toast('اكتب موضوع البحث أولًا');return}
+  requestOpenURL(facebookSearchURL(q),'بحث مخصص في فيسبوك');
+}
+function openFacebookCapture(){
+  document.getElementById('manual-src').value='fb';
+  document.getElementById('m-title').value='شكوى مزارعين — ';
+  document.getElementById('m-body').placeholder='المحافظة · المركز · القرية · اسم الترعة أو المصرف · وصف المشكلة…';
+  document.getElementById('m-url').placeholder='رابط منشور الشكوى على فيسبوك';
+  openSheet('add');setTimeout(()=>{const e=document.getElementById('m-title');e.focus();e.setSelectionRange(e.value.length,e.value.length)},120);
 }
 function facebookFrameLoaded(){
   const l=document.getElementById('fbLoading');if(l)l.style.display='none';
   const s=document.getElementById('fbStatus');if(s){s.classList.add('ready');s.innerHTML='<span class="st"></span><span>متصل بالصفحة الرسمية · يعرض أحدث المنشورات المتاحة</span>'}
 }
 function openOfficialFacebook(){requestOpenURL(OFFICIAL_FB.page,'صفحة الوزارة الرسمية على فيسبوك')}
-function refreshOfficialFacebook(){renderFacebookHub();toast('جارٍ تحديث منشورات الوزارة')}
+function refreshOfficialFacebook(){renderFacebookHub(FB_MODE);toast('جارٍ تحديث مركز رصد فيسبوك')}
 function renderFeed(){
   const feed=document.getElementById('feed');
   if(currentTab==='facebook'){renderFacebookHub();return}
@@ -1010,7 +1087,7 @@ function addManual(){
     t:Date.now()};
   MANUAL.unshift(item);save(LS.manual,MANUAL);
   document.getElementById('m-title').value='';document.getElementById('m-body').value='';document.getElementById('m-url').value='';
-  closeSheet();toast('تم إضافة الخبر');loadFeed();
+  closeSheet();switchTab('feed');toast(item.src==='fb'?'تم حفظ منشور فيسبوك للمتابعة':'تم إضافة الخبر');loadFeed();
 }
 
 /* ============ Keywords ============ */
