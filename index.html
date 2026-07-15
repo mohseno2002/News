@@ -314,6 +314,60 @@ nav button.on{color:var(--acc)}
 .watch-icon{font-size:23px;line-height:1;margin-bottom:9px}.watch-card h4{font:800 14px 'Cairo';margin-bottom:4px}.watch-card p{font-size:11.5px;color:var(--mut);line-height:1.65;margin-bottom:12px}.watch-card button{margin-top:auto;border:1px solid rgba(24,119,242,.35);background:rgba(24,119,242,.1);color:#68aaff;font:800 12px inherit;padding:8px 10px;border-radius:9px;cursor:pointer}.watch-card.complaint button{border-color:rgba(245,166,35,.35);background:rgba(245,166,35,.1);color:var(--warn)}
 .social-search{display:flex;gap:8px;margin:14px 0 0}.social-search input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font:600 13px inherit;outline:0}.social-search input:focus{border-color:#1877f2}.social-search button{border:0;background:#1877f2;color:#fff;font:800 12.5px inherit;padding:0 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
 .complaint-cta{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px;border-radius:13px;background:linear-gradient(135deg,rgba(245,166,35,.13),rgba(239,83,80,.08));border:1px solid rgba(245,166,35,.3)}.complaint-cta>div{flex:1}.complaint-cta h4{font:900 14px 'Cairo';margin-bottom:2px}.complaint-cta p{font-size:11.5px;color:var(--mut)}.complaint-cta button{border:0;background:var(--warn);color:#241500;font:900 12px inherit;padding:10px 13px;border-radius:9px;cursor:pointer;white-space:nowrap}
+/* ===== v2 — بحث فوري + روابط ذكية + تحسينات UX ===== */
+mark.hl{background:linear-gradient(180deg,transparent 58%,rgba(34,211,168,.5) 58%);color:inherit;border-radius:3px;padding:0 1px;font-weight:800}
+html[data-theme="light"] mark.hl{background:linear-gradient(180deg,transparent 58%,rgba(10,157,124,.38) 58%)}
+.recents{display:none;flex-wrap:wrap;gap:6px;margin-top:9px;align-items:center}
+.recents.show{display:flex}
+.rc-t{font-size:11px;color:var(--mut);font-weight:700}
+.rq{border:1px solid var(--line);background:var(--panel);color:var(--txt);font:600 12px inherit;padding:5px 11px;border-radius:16px;cursor:pointer;transition:.15s}
+.rq.clr{color:var(--danger);border-color:transparent;background:transparent}
+.fico{width:16px;height:16px;border-radius:4px;vertical-align:-3px;background:var(--panel2);object-fit:contain}
+.src .fico{width:13px;height:13px;vertical-align:-2px;margin-inline-end:4px;border-radius:3px;background:transparent}
+.card{content-visibility:auto;contain-intrinsic-size:auto 210px}
+header{transition:padding .25s}
+.logo{transition:width .25s,height .25s}
+.brand h1{transition:font-size .25s}
+header.mini{padding-top:8px;padding-bottom:8px}
+header.mini .logo{width:34px;height:34px;flex-basis:34px}
+header.mini .logo svg{width:20px;height:20px}
+header.mini .brand h1{font-size:15px}
+header.mini .sub{display:none}
+header.mini .searchbar{margin-top:8px}
+header.mini .searchbar input{padding-top:8px;padding-bottom:8px}
+header.mini .recents{display:none!important}
+.newpill{position:fixed;left:50%;top:130px;transform:translate(-50%,-14px);z-index:49;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));color:#04121a;font:800 12.5px 'Cairo';
+  padding:9px 17px;border-radius:20px;box-shadow:0 10px 26px rgba(34,211,168,.4);
+  opacity:0;pointer-events:none;transition:.3s}
+.newpill.show{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.sparkrow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 13px;margin:-2px 0 10px}
+.sparkrow .sk-t{font-size:11.5px;color:var(--mut);font-weight:800;white-space:nowrap}
+.sparkrow svg{flex:1;max-width:190px;height:30px;direction:ltr}
+.sparkrow svg rect{fill:var(--acc2);opacity:.38;transition:opacity .2s}
+.sparkrow svg rect.today{fill:var(--acc);opacity:1}
+.sparkrow b{margin-inline-start:auto;font:800 12px 'Cairo';color:var(--acc);white-space:nowrap}
+.toast.ok{border-color:var(--ok)}
+.toast.warn{border-color:var(--warn)}
+.toast.err{border-color:var(--danger)}
+body[data-density="compact"] .card{padding:12px 14px;margin-bottom:8px;contain-intrinsic-size:auto 120px}
+body[data-density="compact"] .card p,body[data-density="compact"] .card .tags{display:none}
+body[data-density="compact"] .card h3{font-size:14.5px;margin-bottom:2px}
+body[data-density="compact"] .card .acts{margin-top:9px;padding-top:9px}
+body[data-density="compact"] .card.hero{padding:14px}
+.denbtn{margin:0;padding:9px 11px}
+.denbtn.on{border-color:var(--acc);color:var(--acc);background:rgba(34,211,168,.1)}
+.link-id{display:flex;align-items:flex-start;gap:11px}
+.link-id .fico{width:34px;height:34px;flex:0 0 34px;border-radius:9px;border:1px solid var(--line);margin-top:2px}
+.link-id>div{flex:1;min-width:0}
+.link-host .lurl{color:var(--mut);font-size:11px}
+.trustrow{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:12.5px;color:var(--mut);font-weight:600;cursor:pointer;user-select:none}
+.trustrow input{width:17px;height:17px;accent-color:var(--acc);flex:0 0 17px;margin:0}
+nav button{transition:transform .12s,color .2s}
+nav button:active{transform:scale(.9)}
+nav button.on{position:relative}
+nav button.on::after{content:'';position:absolute;top:-8px;inset-inline-start:50%;transform:translateX(50%);width:22px;height:3px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.chip:active,.rq:active{transform:scale(.94)}
 @media (min-width:820px){
   #feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
   #feed .dayhdr,#feed .empty{grid-column:1/-1}
@@ -360,8 +414,9 @@ nav button.on{color:var(--acc)}
       <input id="q" type="search" placeholder="ابحث في الأخبار… (مثال: ترعة الإسماعيلية)" aria-label="البحث في الأخبار" autocomplete="off">
       <button class="clear-search" id="clearSearch" onclick="clearSearch()" aria-label="مسح البحث">×</button>
     </div>
-    <button onclick="doSearch()">بحث</button>
+    <button onclick="commitSearch()">بحث</button>
   </div>
+  <div class="recents" id="recents"></div>
   <div class="waterline" id="waterline"><i></i></div>
  </div>
 </header>
@@ -375,6 +430,11 @@ nav button.on{color:var(--acc)}
     <div class="metric"><div class="mv" id="m-fresh">—</div><div class="ml">أخبار اليوم</div></div>
     <div class="metric warn"><div class="mv" id="m-saved">—</div><div class="ml">أخبار محفوظة</div></div>
   </section>
+  <div class="sparkrow" id="sparkrow" aria-label="نشاط الرصد خلال آخر سبعة أيام">
+    <span class="sk-t">نشاط ٧ أيام</span>
+    <svg id="spark" viewBox="0 0 140 30" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <b id="sparkTotal">—</b>
+  </div>
   <div class="trustbar">
     <div class="shield" aria-hidden="true">✓</div>
     <div><b>فتح آمن للروابط</b><br><span id="linkSummary">يتم التحقق من صيغة كل رابط قبل فتحه</span></div>
@@ -387,6 +447,9 @@ nav button.on{color:var(--acc)}
       <button data-w="7" class="on" onclick="setWindow(7)">أسبوع</button>
     </div>
     <div class="viewtools">
+      <button class="refresh denbtn" id="denBtn" onclick="toggleDensity()" aria-label="تبديل كثافة العرض" title="عرض مضغوط / مريح">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
       <select class="sortsel" id="sortSel" onchange="setSort(this.value)" aria-label="ترتيب الأخبار">
         <option value="new">الأحدث أولًا</option>
         <option value="old">الأقدم أولًا</option>
@@ -461,6 +524,7 @@ nav button.on{color:var(--acc)}
     <div class="tabbtns">
       <button class="on" data-st="kw" onclick="stTab('kw')">الكلمات المفتاحية</button>
       <button data-st="src" onclick="stTab('src')">المصادر</button>
+      <button data-st="links" onclick="stTab('links')">الروابط</button>
     </div>
 
     <div id="st-kw">
@@ -494,17 +558,35 @@ nav button.on{color:var(--acc)}
       <div class="srclist" id="srclist"></div>
     </div>
 
+    <div id="st-links" style="display:none">
+      <div class="srchealth">
+        <div class="healthbox"><b id="h-trust">0</b><span>موقع موثوق</span></div>
+        <div class="healthbox"><b style="color:var(--acc)">✓</b><span>تنظيف روابط التتبع</span></div>
+        <div class="healthbox"><b style="color:var(--acc)">✓</b><span>فتح معزول noopener</span></div>
+      </div>
+      <div class="note">تُفحص صيغة كل رابط قبل فتحه، وتُحذف معلمات التتبع (utm / fbclid / gclid…) تلقائيًا عند الفتح أو النسخ أو المشاركة، ويُفتح الرابط في تبويب معزول لا يملك أي صلاحية على التطبيق. المواقع الموثوقة تُفتح مباشرة دون نافذة تأكيد — علِّم «الوثوق بهذا الموقع» عند فتح أي رابط لإضافته هنا.</div>
+      <div class="field"><label>المواقع الموثوقة</label><div id="trustlist"></div></div>
+    </div>
+
     <button class="btn ghost" onclick="closeSheet()" style="margin-top:14px">تم</button>
   </div>
 </div>
+
+<button class="newpill" id="newpill" onclick="pillTop()">⬆ أخبار جديدة</button>
 
 <div class="toast" id="toast"></div>
 
 <div class="link-dialog" id="linkDialog" role="dialog" aria-modal="true" aria-labelledby="linkTitle">
   <div class="link-card">
-    <h3 id="linkTitle">فتح المصدر الأصلي</h3>
-    <p id="linkText">سيتم فتح الرابط في تبويب جديد مع حماية الصفحة الحالية.</p>
+    <div class="link-id">
+      <img id="linkFav" class="fico" alt="" onerror="this.style.visibility='hidden'">
+      <div>
+        <h3 id="linkTitle">فتح المصدر الأصلي</h3>
+        <p id="linkText">سيتم فتح الرابط في تبويب جديد مع حماية الصفحة الحالية.</p>
+      </div>
+    </div>
     <div class="link-host" id="linkHost"></div>
+    <label class="trustrow"><input type="checkbox" id="trustChk"><span>الوثوق بهذا الموقع وفتح روابطه مستقبلًا مباشرةً دون سؤال</span></label>
     <div class="link-actions">
       <button onclick="closeLinkDialog()">إلغاء</button>
       <button onclick="copyPendingLink()">نسخ الرابط</button>
@@ -514,6 +596,14 @@ nav button.on{color:var(--acc)}
 </div>
 
 <script>
+/* ============ تخزين آمن ============
+   لو المتصفح مانع localStorage (فتح محلي content:// أو file:// أو وضع خاص)
+   نكمل الشغل بذاكرة مؤقتة بدل ما يقف التطبيق كله */
+const MEM={};
+const store={
+  get(k){try{return localStorage.getItem(k)}catch(e){return (k in MEM)?MEM[k]:null}},
+  set(k,v){try{localStorage.setItem(k,String(v))}catch(e){MEM[k]=String(v)}}
+};
 /* ============ STATE ============ */
 const LS = {
   kw:'irn_keywords', src:'irn_sources', saved:'irn_saved', manual:'irn_manual',
@@ -563,15 +653,15 @@ let KW = load(LS.kw, DEFAULT_KW);
 let SRC = load(LS.src, DEFAULT_SRC);
 let SAVED = load(LS.saved, []);
 let MANUAL = load(LS.manual, []);
-let WIN_DAYS = +(localStorage.getItem(LS.win)||7);
+let WIN_DAYS = +(store.get(LS.win)||7);
 let activeChip = 'all';
 let currentTab = 'feed';
 let FB_MODE = 'official';
 let allItems = [];
 let rawItems = [];
-let SORT_MODE = localStorage.getItem('irn_sort') || 'new';
+let SORT_MODE = store.get('irn_sort') || 'new';
 let SRC_STATUS = {};   // صحة كل مصدر: {ok, count}
-let LAST_UPD = +(localStorage.getItem(LS.last)||0);
+let LAST_UPD = +(store.get(LS.last)||0);
 let _loading=false;
 
 /* قبول روابط الويب الآمنة فقط ومنع javascript: والروابط المشوهة */
@@ -588,26 +678,26 @@ function sourceHome(value){
 
 /* ترقية المصادر: لو نسخة المصادر قديمة، ندمج الافتراضيات الجديدة ونحافظ على إضافات المستخدم */
 (function migrateSrc(){
-  if(localStorage.getItem(LS.srcv)==='3') return;
+  if(store.get(LS.srcv)==='3') return;
   const oldDefaults=['youm7.com','ahram.org.eg','elwatannews.com','elbalad.news','news.google.com'];
   const userAdded = (load(LS.src,[])||[]).filter(s=>!oldDefaults.some(d=>(s.url||'').includes(d)));
   SRC = DEFAULT_SRC.concat(userAdded);
-  save(LS.src,SRC); localStorage.setItem(LS.srcv,'3');
+  save(LS.src,SRC); store.set(LS.srcv,'3');
 })();
 
 /* إضافة مفردات الرصد الاجتماعي للنسخ السابقة مع الحفاظ على تخصيصات المستخدم */
 (function migrateSocialKeywords(){
-  if(localStorage.getItem(LS.kwv)==='2') return;
+  if(store.get(LS.kwv)==='2') return;
   ['نقص مياه الري','عدم وصول المياه','نهاية الترعة','مناوبة الري','شكوى مزارعين','غرق الأراضي']
     .forEach(k=>{if(!KW.includes(k))KW.push(k)});
-  save(LS.kw,KW);localStorage.setItem(LS.kwv,'2');
+  save(LS.kw,KW);store.set(LS.kwv,'2');
 })();
 
-function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v||d}catch{return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function load(k,d){try{const v=JSON.parse(store.get(k));return v||d}catch{return d}}
+function save(k,v){store.set(k,JSON.stringify(v))}
 
 /* ============ CORS proxies for RSS ============ */
-let USER_PROXY = localStorage.getItem('irn_proxy') || 'https://silent-wildflower-2282.mohseno2002.workers.dev';
+let USER_PROXY = store.get('irn_proxy') || 'https://silent-wildflower-2282.mohseno2002.workers.dev';
 function buildProxies(){
   const arr=[];
   if(USER_PROXY){
@@ -665,10 +755,12 @@ function parseRSS(txt){
       let title=g('title');
       const pub=g('pubDate')||g('published')||g('updated');
       // جوجل أخبار: اسم الجريدة الأصلية في <source>، والعنوان بيتذيّل بـ " - اسم الجريدة"
-      let outlet=g('source');
+      const se=n.querySelector('source');
+      let outlet=se?se.textContent.trim():'';
+      const outletHome=se?safeURL(se.getAttribute('url')||''):'';
       if(outlet && title.endsWith(' - '+outlet)) title=title.slice(0,-(' - '+outlet).length).trim();
       const t = pub ? Date.parse(pub) : NaN;
-      if(title) out.push({title,desc:desc.slice(0,240),link,pub,t,outlet});
+      if(title) out.push({title,desc:desc.slice(0,240),link,pub,t,outlet,outletHome});
     });
   }catch(e){}
   return out;
@@ -771,17 +863,36 @@ async function loadFeed(silent){
   results = manualItems.concat(results);
   results.sort((a,b)=>(b.t||0)-(a.t||0));
 
+  // 🛡️ فشل الجلب بالكامل مع وجود نسخة سابقة؟ نحافظ عليها بدل مسح الشاشة
+  if(!results.length && rawItems.length){
+    btn.classList.remove('spin');btn.disabled=false;document.querySelector('main').removeAttribute('aria-busy');
+    document.getElementById('waterline').classList.remove('on');_loading=false;
+    renderFeed();renderStats();
+    if(!silent) toast('تعذر الجلب الآن — تُعرض آخر نسخة محفوظة','warn');
+    return;
+  }
+
   rawItems = results;
+  buildIndex(rawItems);
   allItems = freshOnly(rawItems,WIN_DAYS);
   save(LS.cache, results.slice(0,80));
-  LAST_UPD=Date.now();localStorage.setItem(LS.last,LAST_UPD);
+  LAST_UPD=Date.now();store.set(LS.last,LAST_UPD);
   btn.classList.remove('spin');
   btn.disabled=false;document.querySelector('main').removeAttribute('aria-busy');
   document.getElementById('waterline').classList.remove('on');
   _loading=false;
   renderFeed();renderStats();
 
-  if(silent && results.length>prevCount) toast(`وصل ${results.length-prevCount} خبر جديد 🔔`);
+  if(silent && results.length>prevCount){
+    const n=results.length-prevCount;
+    toast(`وصل ${n} خبر جديد 🔔`,'ok');
+    if(window.scrollY>300){
+      const p=document.getElementById('newpill');
+      p.textContent=`⬆ ${n.toLocaleString('ar-EG')} خبر جديد`;
+      p.style.top=(document.querySelector('header').getBoundingClientRect().height+12)+'px';
+      p.classList.add('show');
+    }
+  }
 
   if(!results.length){
     const isLocal = location.protocol==='file:' || location.protocol==='content:';
@@ -800,7 +911,7 @@ async function loadFeed(silent){
 
 function winLabel(){return WIN_DAYS===1?'٢٤ ساعة':WIN_DAYS===3?'٣ أيام':'أسبوع'}
 function setWindow(d){
-  WIN_DAYS=d;localStorage.setItem(LS.win,d);
+  hapt();WIN_DAYS=d;store.set(LS.win,d);
   document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===d));
   // إعادة فلترة فورية بدون جلب جديد
   allItems=freshOnly(rawItems,WIN_DAYS);renderFeed();renderStats();
@@ -808,7 +919,7 @@ function setWindow(d){
 }
 function setSort(mode){
   SORT_MODE=['new','old','source'].includes(mode)?mode:'new';
-  localStorage.setItem('irn_sort',SORT_MODE);renderFeed();
+  store.set('irn_sort',SORT_MODE);renderFeed();
 }
 
 function srcLabel(t){return {news:'موقع إخباري',fb:'فيسبوك',x:'إكس',gov:'جهة رسمية',agg:'متعدد المصادر',manual:'إدخال يدوي'}[t]||'مصدر'}
@@ -831,6 +942,7 @@ function fdotClass(t){
 
 /* ============ Stats strip ============ */
 function renderStats(){
+  if(SEARCH_Q && currentTab!=='facebook'){updateOverview();return}
   const st=document.getElementById('stats');
   const names=Object.keys(SRC_STATUS).filter(k=>k!=='__worker');
   const ok=names.filter(n=>SRC_STATUS[n].ok).length;
@@ -860,8 +972,29 @@ function updateOverview(){
   document.getElementById('h-ok').textContent=ok.toLocaleString('ar-EG');
   document.getElementById('h-bad').textContent=(Math.max(0,names.length-names.filter(n=>SRC_STATUS[n].ok).length)+(officialOk?0:1)).toLocaleString('ar-EG');
   document.getElementById('h-links').textContent=(SRC.filter(s=>safeURL(s.url)).length+1).toLocaleString('ar-EG');
-  document.getElementById('linkSummary').textContent=navigator.onLine?'الاتصال متاح · تُرفض الروابط غير الآمنة تلقائيًا':'وضع دون اتصال · الأخبار المحفوظة متاحة';
+  document.getElementById('linkSummary').textContent=navigator.onLine?'تُنظَّف روابط التتبع وتُرفض الروابط غير الآمنة تلقائيًا':'وضع دون اتصال · الأخبار المحفوظة متاحة';
+  renderSpark();
 }
+/* ⚡ مخطط نشاط آخر ٧ أيام */
+function renderSpark(){
+  const svg=document.getElementById('spark');if(!svg)return;
+  const end=new Date();end.setHours(23,59,59,999);
+  const endT=end.getTime();
+  const days=Array(7).fill(0);
+  rawItems.forEach(it=>{
+    if(!it.t)return;
+    const diff=Math.floor((endT-it.t)/86400000);
+    if(diff>=0&&diff<7)days[6-diff]++;
+  });
+  const max=Math.max(1,...days);
+  const bw=16,gap=4;
+  svg.innerHTML=days.map((v,i)=>{
+    const h=Math.max(2,Math.round(v/max*26));
+    return `<rect class="${i===6?'today':''}" x="${i*(bw+gap)+2}" y="${28-h}" width="${bw}" height="${h}" rx="3"></rect>`;
+  }).join('');
+  document.getElementById('sparkTotal').textContent=days.reduce((a,b)=>a+b,0).toLocaleString('ar-EG')+' خبر';
+}
+function pillTop(){document.getElementById('newpill').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})}
 
 /* ============ Render (مجمّع باليوم + Hero) ============ */
 function dayKey(t){const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()}
@@ -877,24 +1010,41 @@ function cardHTML(it,i,tab,isHero){
   const tags=matchedTags(it);
   const isSaved=SAVED.some(s=>normTitle(s.title)===normTitle(it.title));
   const isNew=it.t && (Date.now()-it.t)<6*3600000;
+  const okLink=it.link&&safeURL(it.link);
+  const lh=okLink?linkDomain(it):'';
   return `<article class="card s-${esc(it.srcType||'news')} ${isHero?'hero':''}" style="animation-delay:${Math.min(i,12)*.03}s">
     ${isHero?'<div class="heroLbl">⚡ أحدث خبر</div>':''}
     <div class="meta">
-      <span class="src ${srcClass(it.srcType)}">${esc(it.srcName||srcLabel(it.srcType))}</span>
+      <span class="src ${srcClass(it.srcType)}">${faviconHTML(it)}${esc(it.srcName||srcLabel(it.srcType))}</span>
       ${it.via?`<span class="via">عبر ${esc(it.via)}</span>`:''}
       <span class="time"><span class="fdot ${fdotClass(it.t)}"></span>${timeAgo(it.t)}</span>
       ${isNew?'<span class="newbadge">جديد</span>':''}
-      ${it.link&&safeURL(it.link)?'<span class="linkmark">رابط صالح</span>':''}
+      ${lh?`<span class="linkmark" dir="ltr">${esc(lh)}</span>`:''}
     </div>
-    <h3>${esc(it.title)}</h3>
-    ${it.desc?`<p>${esc(it.desc)}</p>`:''}
+    <h3>${hl(esc(it.title))}</h3>
+    ${it.desc?`<p>${hl(esc(it.desc))}</p>`:''}
     ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
     <div class="acts">
-      ${it.link&&safeURL(it.link)?`<button class="primary" onclick='requestOpenLink(${i},"${tab}")'>فتح المصدر ↗</button>`:''}
+      ${okLink?`<button class="primary" onclick='requestOpenLink(${i},"${tab}")'>فتح المصدر ↗</button>`:''}
       <button onclick='toggleSave(${i},"${tab}")'>${isSaved?'★ محفوظ':'☆ حفظ'}</button>
       <button onclick='shareItem(${i},"${tab}")'>مشاركة</button>
     </div>
   </article>`;
+}
+/* هوية الرابط: نطاق الجريدة الأصلية بدل رابط جوجل الوسيط */
+function hostOf(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch{return ''}}
+function linkDomain(it){
+  const oh=hostOf(it.outletHome||'');
+  if(oh) return oh;
+  const h=hostOf(it.link||'');
+  return h==='news.google.com'?'Google News':h;
+}
+function faviconHTML(it){
+  const oh=hostOf(it.outletHome||'');
+  const lh=hostOf(it.link||'');
+  const h=oh||(lh&&lh!=='news.google.com'?lh:'');
+  if(!h)return '';
+  return `<img class="fico" loading="lazy" alt="" src="https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(h)}" onerror="this.remove()">`;
 }
 function facebookPluginURL(){
   const p=new URLSearchParams({href:OFFICIAL_FB.page,tabs:'timeline',width:'500',height:'720',small_header:'false',adapt_container_width:'true',hide_cover:'false',show_facepile:'false'});
@@ -962,7 +1112,8 @@ function refreshOfficialFacebook(){renderFacebookHub(FB_MODE);toast('جارٍ ت
 function renderFeed(){
   const feed=document.getElementById('feed');
   if(currentTab==='facebook'){renderFacebookHub();return}
-  let items = [...(currentTab==='saved' ? SAVED : allItems)];
+  const baseList = currentTab==='saved'?SAVED:allItems;
+  let items = [...baseList];
   if(activeChip!=='all' && currentTab==='feed'){
     items = items.filter(i=>{
       if(activeChip==='_src_news') return i.srcType==='news'||!i.srcType;
@@ -972,8 +1123,23 @@ function renderFeed(){
       return hay.includes(activeChip.toLowerCase());
     });
   }
-  if(currentTab==='saved'){
-    document.getElementById('stats').innerHTML=`<b>${items.length}</b> خبر محفوظ`;
+
+  /* ⚡ البحث الفوري: تطبيع عربي + فهرس مسبق + قياس زمن */
+  const toks=qTokens(SEARCH_Q);
+  let elapsed=0;
+  if(toks.length){
+    const t0=performance.now();
+    items=items.filter(it=>matchTokens(it,toks));
+    elapsed=performance.now()-t0;
+    setHighlight(toks);
+  } else setHighlight([]);
+
+  const st=document.getElementById('stats');
+  if(toks.length){
+    const ms=elapsed<1?'أقل من ١':Math.round(elapsed).toLocaleString('ar-EG');
+    st.innerHTML=`<b>${items.length.toLocaleString('ar-EG')}</b> نتيجة لـ «${esc(SEARCH_Q)}»${currentTab==='saved'?' في المحفوظ':''}<span class="sep"> · </span><span class="srcok">⚡ ${ms} م.ث</span>`;
+  } else if(currentTab==='saved'){
+    st.innerHTML=`<b>${items.length}</b> خبر محفوظ`;
   }
 
   if(SORT_MODE==='old') items.sort((a,b)=>(a.t||0)-(b.t||0));
@@ -981,6 +1147,11 @@ function renderFeed(){
   else items.sort((a,b)=>(b.t||0)-(a.t||0));
 
   if(!items.length){
+    if(toks.length){
+      const sugg=RECENTS.filter(r=>normAr(r)!==normAr(SEARCH_Q)).slice(0,4);
+      feed.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><div>مفيش نتائج لـ «${esc(SEARCH_Q)}».<br>جرّب كلمة أقصر أو وسّع النافذة الزمنية.</div>${sugg.length?`<div class="recents show" style="justify-content:center;margin-top:14px">${sugg.map(r=>`<button class="rq" onclick="useRecentText(this.textContent)">${esc(r)}</button>`).join('')}</div>`:''}</div>`;
+      return;
+    }
     if(currentTab==='saved'){
       feed.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><div>مفيش أخبار محفوظة لسه.<br>دوس ☆ على أي خبر يهمك.</div></div>';
       return;
@@ -989,19 +1160,21 @@ function renderFeed(){
     return;
   }
 
-  // فهرسة الأصل عشان الحفظ/المشاركة تشتغل صح مع التجميع
-  const baseList = currentTab==='saved'?SAVED:allItems;
-  const idxOf = it=>baseList.indexOf(it);
+  // فهرسة الأصل O(n) عشان الحفظ/المشاركة تشتغل صح مع التجميع
+  const idx=new Map(baseList.map((x,j)=>[x,j]));
+  // عدّاد الأيام محسوب مرة واحدة بدل الفلترة داخل الحلقة
+  const grouping = currentTab==='feed' && SORT_MODE!=='source';
+  const dayCounts={};
+  if(grouping) items.forEach(x=>{const k=dayKey(x.t||Date.now());dayCounts[k]=(dayCounts[k]||0)+1});
 
   let html='', lastDay='';
   items.forEach((it,vi)=>{
     const dk=dayKey(it.t||Date.now());
-    if(currentTab==='feed' && SORT_MODE!=='source' && dk!==lastDay){
+    if(grouping && dk!==lastDay){
       lastDay=dk;
-      const cnt=items.filter(x=>dayKey(x.t||Date.now())===dk).length;
-      html+=`<div class="dayhdr">${dayTitle(it.t||Date.now())}<span class="dc">${cnt}</span></div>`;
+      html+=`<div class="dayhdr">${dayTitle(it.t||Date.now())}<span class="dc">${dayCounts[dk]}</span></div>`;
     }
-    html+=cardHTML(it, idxOf(it), currentTab, currentTab==='feed'&&vi===0&&activeChip==='all'&&SORT_MODE==='new');
+    html+=cardHTML(it, idx.get(it), currentTab, currentTab==='feed'&&vi===0&&activeChip==='all'&&SORT_MODE==='new'&&!toks.length);
   });
   feed.innerHTML=html;
 }
@@ -1011,36 +1184,105 @@ function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>'
 function toggleSave(i,tab){
   const list = tab==='saved'?SAVED:allItems;
   const it=list[i];if(!it)return;
+  hapt();
   const idx=SAVED.findIndex(s=>normTitle(s.title)===normTitle(it.title));
   if(idx>=0){SAVED.splice(idx,1);toast('أُزيل من المحفوظ')}
-  else{SAVED.unshift(it);toast('تم الحفظ ★')}
+  else{SAVED.unshift(it);toast('تم الحفظ ★','ok')}
   save(LS.saved,SAVED);renderFeed();updateOverview();
 }
 function shareItem(i,tab){
   const list=tab==='saved'?SAVED:allItems;const it=list[i];if(!it)return;
-  const text=`${it.title}\n${it.desc||''}\n${it.link||''}`;
-  if(navigator.share){navigator.share({title:it.title,text:it.desc||'',url:it.link||location.href}).catch(()=>{})}
-  else{copyText(text).then(()=>toast('تم نسخ الخبر')).catch(()=>toast('تعذر النسخ على هذا المتصفح'))}
+  const link=it.link?cleanURL(safeURL(it.link)):'';
+  const text=`${it.title}\n${it.desc||''}\n${link}`;
+  if(navigator.share){navigator.share({title:it.title,text:it.desc||'',url:link||location.href}).catch(()=>{})}
+  else{copyText(text).then(()=>toast('تم نسخ الخبر','ok')).catch(()=>toast('تعذر النسخ على هذا المتصفح','err'))}
 }
 function copyText(text){
   if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);
   return new Promise((resolve,reject)=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')?resolve():reject()}catch(e){reject(e)}finally{ta.remove()}})
 }
+/* ============ ⚡ محرك البحث الفوري v2 ============
+   تطبيع عربي كامل (همزات/تاء مربوطة/ألف مقصورة/تشكيل/أرقام هندية)
+   + فهرس نصي مُسبق لكل خبر + مطابقة كل الكلمات + إبراز النتائج */
+let SEARCH_Q='';
+let RECENTS=load('irn_recentq',[]);
+const AR_DIAC=/[\u064B-\u0652\u0670\u0640]/g;
+function normAr(s){
+  return (s||'').toLowerCase()
+    .replace(AR_DIAC,'')
+    .replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي')
+    .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+    .replace(/[«»“”"',.،؛:!؟?]/g,' ').replace(/\s+/g,' ').trim();
+}
+function ensureIdx(it){return it._s || (it._s = normAr((it.title||'')+' '+(it.desc||'')+' '+(it.srcName||'')))}
+function buildIndex(arr){(arr||[]).forEach(ensureIdx)}
+function qTokens(q){return normAr(q||'').split(' ').filter(Boolean)}
+function matchTokens(it,toks){const s=ensureIdx(it);return toks.every(t=>s.includes(t))}
+/* إبراز مرن: يقبل اختلاف الهمزات والتاء المربوطة والتشكيل داخل النص الأصلي */
+function arFlex(tok){
+  const escd=tok.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return escd.split('').map(ch=>{
+    if('اأإآٱ'.includes(ch))return '[اأإآٱ]';
+    if('هة'.includes(ch))return '[هة]';
+    if('يىئ'.includes(ch))return '[يىئ]';
+    if(ch==='و')return '[وؤ]';
+    if(/[0-9]/.test(ch))return '['+ch+'٠١٢٣٤٥٦٧٨٩'.charAt(+ch)+']';
+    return ch;
+  }).join('[\\u064B-\\u0652\\u0670\\u0640]*');
+}
+let HL_RE=null;
+function setHighlight(toks){
+  try{HL_RE = toks.length ? new RegExp('('+toks.map(arFlex).join('|')+')','gi') : null}
+  catch(e){HL_RE=null}
+}
+function hl(escaped){
+  if(!HL_RE) return escaped;
+  return escaped.replace(HL_RE,'<mark class="hl">$1</mark>');
+}
+/* عمليات البحث الأخيرة */
+function pushRecent(q){
+  q=(q||'').trim();if(!q)return;
+  RECENTS=[q,...RECENTS.filter(x=>x!==q)].slice(0,6);
+  save('irn_recentq',RECENTS);
+}
+function renderRecents(){
+  const box=document.getElementById('recents');
+  if(document.getElementById('q').value.trim() || !RECENTS.length){box.classList.remove('show');return}
+  box.innerHTML='<span class="rc-t">بحث سابق:</span>'
+    +RECENTS.map((r,i)=>`<button class="rq" onmousedown="useRecent(${i})">${esc(r)}</button>`).join('')
+    +'<button class="rq clr" onmousedown="clearRecents()">مسح</button>';
+  box.classList.add('show');
+}
+function useRecent(i){const el=document.getElementById('q');el.value=RECENTS[i]||'';pushRecent(el.value);doSearch()}
+function useRecentText(t){const el=document.getElementById('q');el.value=t||'';pushRecent(t);doSearch();window.scrollTo({top:0,behavior:'smooth'})}
+function clearRecents(){RECENTS=[];save('irn_recentq',RECENTS);renderRecents()}
+
 function doSearch(){
-  if(currentTab==='facebook') switchTab('feed');
-  const q=document.getElementById('q').value.trim().toLowerCase();
-  document.getElementById('clearSearch').classList.toggle('show',!!q);
-  if(!q){activeChip='all';renderFeed();renderStats();return}
-  const feed=document.getElementById('feed');
-  const items=allItems.filter(i=>(i.title+' '+(i.desc||'')).toLowerCase().includes(q));
-  document.getElementById('stats').innerHTML=`<b>${items.length}</b> نتيجة لـ "${esc(q)}"`;
-  feed.innerHTML = items.length? items.map((it,i)=>cardHTML(it,allItems.indexOf(it),'feed',false)).join('')
-    : '<div class="empty"><div>مفيش نتائج.</div></div>';
+  const el=document.getElementById('q');
+  const q=el.value.trim();
+  if(currentTab==='facebook' && q){switchTab('feed');el.value=q}
+  SEARCH_Q=el.value.trim();
+  document.getElementById('clearSearch').classList.toggle('show',!!SEARCH_Q);
+  renderRecents();
+  renderFeed();
+  if(!SEARCH_Q) renderStats();
+}
+function commitSearch(){
+  const q=document.getElementById('q').value.trim();
+  if(q) pushRecent(q);
+  doSearch();
+  document.getElementById('q').blur();
 }
 let _qT;
-document.getElementById('q').addEventListener('input',()=>{clearTimeout(_qT);_qT=setTimeout(doSearch,350)});
-document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
-function clearSearch(){document.getElementById('q').value='';document.getElementById('clearSearch').classList.remove('show');activeChip='all';renderChips();renderFeed();renderStats();document.getElementById('q').focus()}
+document.getElementById('q').addEventListener('input',()=>{clearTimeout(_qT);_qT=setTimeout(doSearch,120)});
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commitSearch()}});
+document.getElementById('q').addEventListener('focus',renderRecents);
+document.getElementById('q').addEventListener('blur',()=>setTimeout(()=>document.getElementById('recents').classList.remove('show'),120));
+function clearSearch(){
+  const el=document.getElementById('q');el.value='';SEARCH_Q='';
+  document.getElementById('clearSearch').classList.remove('show');
+  activeChip='all';renderChips();renderFeed();renderStats();el.focus();renderRecents();
+}
 
 /* ============ Chips ============ */
 function renderChips(){
@@ -1049,11 +1291,14 @@ function renderChips(){
   const kwc=KW.slice(0,8).map(k=>({id:k,l:k}));
   c.innerHTML=[...fixed,...kwc].map(x=>`<div class="chip ${activeChip===x.id?'on':''}" onclick="setChip('${x.id.replace(/'/g,"")}')">${x.l}</div>`).join('');
 }
-function setChip(id){activeChip=id;renderChips();renderFeed()}
+function setChip(id){hapt();activeChip=id;renderChips();renderFeed()}
 
 /* ============ Tabs ============ */
 function switchTab(t){
+  hapt();
   currentTab=t;activeChip='all';
+  const q=document.getElementById('q');
+  if(q.value){q.value='';SEARCH_Q='';document.getElementById('clearSearch').classList.remove('show')}
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   document.getElementById('chips').style.display=t==='facebook'?'none':'';
   document.getElementById('feedTools').style.display=t==='facebook'?'none':'';
@@ -1064,16 +1309,24 @@ function switchTab(t){
 /* ============ Sheets ============ */
 function openSheet(which){
   if(which==='add'){document.getElementById('sheet-add').classList.add('open')}
-  if(which==='settings'){renderKw();renderSrc();document.getElementById('proxy-url').value=USER_PROXY;document.getElementById('sheet-settings').classList.add('open')}
+  if(which==='settings'){renderKw();renderSrc();renderTrusted();document.getElementById('proxy-url').value=USER_PROXY;document.getElementById('sheet-settings').classList.add('open')}
 }
 function closeSheet(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'))}
 document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeSheet()}));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeLinkDialog()}});
+document.addEventListener('keydown',e=>{
+  const q=document.getElementById('q');
+  if(e.key==='/' && document.activeElement!==q && !e.target.closest('input,textarea,select')){e.preventDefault();q.focus();return}
+  if(e.key==='Escape'){
+    if(document.activeElement===q && q.value){clearSearch();return}
+    closeSheet();closeLinkDialog();
+  }
+});
 
 function stTab(t){
   document.querySelectorAll('.tabbtns button').forEach(b=>b.classList.toggle('on',b.dataset.st===t));
   document.getElementById('st-kw').style.display=t==='kw'?'':'none';
   document.getElementById('st-src').style.display=t==='src'?'':'none';
+  document.getElementById('st-links').style.display=t==='links'?'':'none';
 }
 
 /* ============ Manual add ============ */
@@ -1081,7 +1334,7 @@ function addManual(){
   const title=document.getElementById('m-title').value.trim();
   if(!title){toast('اكتب عنوان الخبر');return}
   const rawLink=document.getElementById('m-url').value.trim();
-  if(rawLink&&!safeURL(rawLink)){toast('الرابط غير صالح — استخدم https://');return}
+  if(rawLink&&!safeURL(rawLink)){toast('الرابط غير صالح — استخدم https://','err');return}
   const item={title,desc:document.getElementById('m-body').value.trim(),
     src:document.getElementById('manual-src').value,link:rawLink?safeURL(rawLink):'',
     t:Date.now()};
@@ -1120,20 +1373,20 @@ function addSrc(){
   const nm=document.getElementById('src-nm').value.trim();
   const url=document.getElementById('src-url').value.trim();
   if(!nm||!url){toast('اكتب الاسم والرابط');return}
-  const valid=safeURL(url);if(!valid){toast('رابط RSS غير صالح — استخدم https://');return}
+  const valid=safeURL(url);if(!valid){toast('رابط RSS غير صالح — استخدم https://','err');return}
   SRC.push({nm,url:valid,ty:'news'});save(LS.src,SRC);
   document.getElementById('src-nm').value='';document.getElementById('src-url').value='';
-  renderSrc();toast('تم إضافة المصدر');
+  renderSrc();toast('تم إضافة المصدر','ok');
 }
 function delSrc(i){SRC.splice(i,1);save(LS.src,SRC);renderSrc()}
-function resetSrc(){SRC=JSON.parse(JSON.stringify(DEFAULT_SRC));save(LS.src,SRC);renderSrc();toast('تم استعادة المصادر');loadFeed()}
+function resetSrc(){SRC=JSON.parse(JSON.stringify(DEFAULT_SRC));save(LS.src,SRC);renderSrc();toast('تم استعادة المصادر','ok');loadFeed()}
 function saveProxy(){
   const raw=document.getElementById('proxy-url').value.trim();
-  if(raw&&!safeURL(raw)){toast('رابط البروكسي غير صالح');return}
+  if(raw&&!safeURL(raw)){toast('رابط البروكسي غير صالح','err');return}
   USER_PROXY=raw?safeURL(raw):'';
-  localStorage.setItem('irn_proxy',USER_PROXY);
+  store.set('irn_proxy',USER_PROXY);
   PROXIES=buildProxies();
-  toast(USER_PROXY?'تم حفظ البروكسي ⭐':'تم المسح');loadFeed();
+  toast(USER_PROXY?'تم حفظ البروكسي ⭐':'تم المسح','ok');loadFeed();
 }
 async function probeSource(i,btn){
   const s=SRC[i];if(!s)return;
@@ -1141,38 +1394,82 @@ async function probeSource(i,btn){
   const items=await fetchRSS(s.url);
   SRC_STATUS[s.nm]={ok:Array.isArray(items)&&items.length>0,count:Array.isArray(items)?items.length:0};
   btn.textContent=old;btn.disabled=false;renderSrc();
-  toast(SRC_STATUS[s.nm].ok?`المصدر يعمل وجلب ${items.length} خبرًا`:'تعذر الوصول للمصدر الآن');
+  toast(SRC_STATUS[s.nm].ok?`المصدر يعمل وجلب ${items.length} خبرًا`:'تعذر الوصول للمصدر الآن',SRC_STATUS[s.nm].ok?'ok':'warn');
 }
 
-/* ============ فتح الروابط بصورة آمنة وواضحة ============ */
+/* ============ 🔗 فتح الروابط v2: تنظيف تتبع + مواقع موثوقة + هوية الوجهة ============ */
 let PENDING_LINK='';
+let TRUSTED=load('irn_trusted',[]);
+function cleanURL(u){
+  try{
+    const x=new URL(u);
+    [...x.searchParams.keys()].forEach(k=>{
+      if(/^(utm_|fbclid|gclid|igshid|mc_cid|mc_eid|ref_src)/i.test(k)) x.searchParams.delete(k);
+    });
+    return x.href;
+  }catch{return u}
+}
+function isTrusted(u){const h=hostOf(u);return !!h && TRUSTED.includes(h)}
+function trustHost(u){const h=hostOf(u);if(h && !TRUSTED.includes(h)){TRUSTED.push(h);save('irn_trusted',TRUSTED)}}
+function untrust(i){TRUSTED.splice(i,1);save('irn_trusted',TRUSTED);renderTrusted();toast('أُلغي الوثوق بالموقع')}
+function renderTrusted(){
+  const el=document.getElementById('trustlist');if(!el)return;
+  document.getElementById('h-trust').textContent=TRUSTED.length.toLocaleString('ar-EG');
+  el.innerHTML=TRUSTED.length
+    ? TRUSTED.map((h,i)=>`<div class="srcrow"><span class="st ok"></span><div class="nm" dir="ltr" style="text-align:left">${esc(h)}</div><button class="del" onclick="untrust(${i})" aria-label="إزالة الموقع">×</button></div>`).join('')
+    : '<div class="note" style="margin:0">لا توجد مواقع موثوقة بعد. عند فتح أي رابط علِّم «الوثوق بهذا الموقع» ليُفتح مستقبلًا مباشرة دون سؤال.</div>';
+}
+function openNow(url){
+  const w=window.open(url,'_blank','noopener,noreferrer');
+  if(w)w.opener=null;else{copyText(url).then(()=>toast('منع المتصفح النافذة؛ تم نسخ الرابط','warn'))}
+}
 function requestOpenLink(i,tab){
   const list=tab==='saved'?SAVED:allItems;const it=list[i];if(!it)return;
-  requestOpenURL(it.link,it.srcName||'المصدر الأصلي');
+  requestOpenURL(it.link,it.srcName||'المصدر الأصلي',{outlet:it.outlet||it.srcName||'',outletHome:it.outletHome||''});
 }
-function requestOpenURL(value,label){
-  const url=safeURL(value);
-  if(!url){toast('تم منع رابط غير صالح');return}
+function requestOpenURL(value,label,meta){
+  const url=cleanURL(safeURL(value));
+  if(!url){toast('تم منع رابط غير صالح','err');return}
+  if(isTrusted(url)){hapt();openNow(url);toast('فُتح مباشرة — موقع موثوق ↗','ok');return}
   PENDING_LINK=url;
-  let host='';try{host=new URL(url).hostname.replace(/^www\./,'')}catch{}
+  const host=hostOf(url);
+  const viaGN = host==='news.google.com';
+  const destHome = meta ? hostOf(meta.outletHome||'') : '';
+  const dest = viaGN ? (destHome || (meta&&meta.outlet) || '') : '';
   document.getElementById('linkTitle').textContent='فتح '+(label||'المصدر');
-  document.getElementById('linkText').textContent='الرابط صالح وسيُفتح في تبويب جديد دون منح الصفحة الخارجية صلاحية التحكم في التطبيق.';
-  document.getElementById('linkHost').textContent=host+'  ·  '+url;
+  document.getElementById('linkText').textContent = viaGN
+    ? 'يمر الرابط عبر تحويلة Google News ثم يصل مباشرةً إلى المقال الأصلي'+(dest?' في «'+dest+'»':'')+'.'
+    : 'الرابط صالح ونظيف من معلمات التتبع، وسيُفتح في تبويب معزول دون أي صلاحية على التطبيق.';
+  const fav=document.getElementById('linkFav');
+  fav.style.visibility='visible';
+  fav.src='https://www.google.com/s2/favicons?sz=64&domain='+encodeURIComponent(viaGN&&destHome?destHome:host);
+  document.getElementById('linkHost').innerHTML='🔒 <b>'+esc(host)+'</b><span class="lurl"> · '+esc(url)+'</span>';
+  document.getElementById('trustChk').checked=false;
   document.getElementById('linkDialog').classList.add('open');
 }
 function closeLinkDialog(){document.getElementById('linkDialog').classList.remove('open');PENDING_LINK=''}
 function confirmOpenLink(){
-  const url=safeURL(PENDING_LINK);if(!url){closeLinkDialog();toast('الرابط غير صالح');return}
-  const w=window.open(url,'_blank','noopener,noreferrer');
-  if(w)w.opener=null;else{copyText(url).then(()=>toast('منع المتصفح النافذة؛ تم نسخ الرابط'))}
-  closeLinkDialog();
+  const url=safeURL(PENDING_LINK);if(!url){closeLinkDialog();toast('الرابط غير صالح','err');return}
+  if(document.getElementById('trustChk').checked){trustHost(url);renderTrusted();toast('أُضيف للمواقع الموثوقة ✓','ok')}
+  hapt();openNow(url);closeLinkDialog();
 }
-function copyPendingLink(){if(!PENDING_LINK)return;copyText(PENDING_LINK).then(()=>toast('تم نسخ الرابط')).catch(()=>toast('تعذر النسخ'))}
+function copyPendingLink(){if(!PENDING_LINK)return;copyText(PENDING_LINK).then(()=>toast('تم نسخ الرابط','ok')).catch(()=>toast('تعذر النسخ','err'))}
 document.getElementById('linkDialog').addEventListener('click',e=>{if(e.target.id==='linkDialog')closeLinkDialog()});
 
-/* ============ Toast ============ */
+/* ============ Toast (بأنواع) + اهتزاز خفيف + كثافة العرض ============ */
 let toastT;
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+function toast(m,type){const t=document.getElementById('toast');t.textContent=m;t.className='toast show'+(type?' '+type:'');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+function hapt(ms){try{if(navigator.vibrate)navigator.vibrate(ms||8)}catch(e){}}
+let DENSITY=store.get('irn_density')||'comfort';
+function applyDensity(){
+  document.body.dataset.density=DENSITY;
+  const b=document.getElementById('denBtn');if(b)b.classList.toggle('on',DENSITY==='compact');
+}
+function toggleDensity(){
+  DENSITY=DENSITY==='compact'?'comfort':'compact';
+  store.set('irn_density',DENSITY);applyDensity();hapt();
+  toast(DENSITY==='compact'?'عرض مضغوط — عناوين أكثر في الشاشة':'العرض المريح','ok');
+}
 
 /* ============ Theme ============ */
 const SUN='<path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/><circle cx="12" cy="12" r="4"/>';
@@ -1184,9 +1481,9 @@ function applyTheme(t){
 }
 function toggleTheme(){
   const cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
-  localStorage.setItem('irn_theme',cur);applyTheme(cur);
+  store.set('irn_theme',cur);applyTheme(cur);
 }
-applyTheme(localStorage.getItem('irn_theme')||'dark');
+applyTheme(store.get('irn_theme')||'dark');
 
 /* ============ سحب للتحديث + زر الصعود ============ */
 (function(){
@@ -1210,7 +1507,13 @@ applyTheme(localStorage.getItem('irn_theme')||'dark');
   },{passive:true});
 
   const tt=document.getElementById('totop');
-  window.addEventListener('scroll',()=>{tt.classList.toggle('show',window.scrollY>600)},{passive:true});
+  const hdr=document.querySelector('header');
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    tt.classList.toggle('show',y>600);
+    hdr.classList.toggle('mini',y>90);
+    if(y<120)document.getElementById('newpill').classList.remove('show');
+  },{passive:true});
 })();
 
 /* ============ تحديث تلقائي كل 10 دقائق ============ */
@@ -1224,9 +1527,10 @@ document.addEventListener('visibilitychange',()=>{
 function init(){
   document.querySelectorAll('#winSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.w===WIN_DAYS));
   document.getElementById('sortSel').value=SORT_MODE;
+  applyDensity();
   renderChips();
   const cached=freshOnly(load(LS.cache,[]),7);
-  if(cached.length){rawItems=cached;allItems=freshOnly(rawItems,WIN_DAYS);renderFeed();renderStats()}
+  if(cached.length){rawItems=cached;buildIndex(rawItems);allItems=freshOnly(rawItems,WIN_DAYS);renderFeed();renderStats()}
   updateNetworkState();updateOverview();
   loadFeed(cached.length>0);
 }
@@ -1238,8 +1542,8 @@ function updateNetworkState(){
   updateOverview();
   if(currentTab==='facebook') renderFacebookHub();
 }
-window.addEventListener('online',()=>{updateNetworkState();toast('عاد الاتصال بالإنترنت');loadFeed(true)});
-window.addEventListener('offline',()=>{updateNetworkState();toast('انقطع الاتصال — ستظل النسخة المحفوظة متاحة')});
+window.addEventListener('online',()=>{updateNetworkState();toast('عاد الاتصال بالإنترنت','ok');loadFeed(true)});
+window.addEventListener('offline',()=>{updateNetworkState();toast('انقطع الاتصال — ستظل النسخة المحفوظة متاحة','warn')});
 </script>
 </body>
 </html>
